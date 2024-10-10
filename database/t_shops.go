@@ -32,7 +32,7 @@ func (st *ShopsTable) Add(s Shop) error {
 
 	//если норм, в бд все это дело
 	_, err := st.db.Exec(`INSERT INTO Shops (brand_id, distance, score)
-		SELECT $1, $2, $3
+		VALUES ($1, $2, $3)
 		`,
 		s.BrandID, s.Distance, s.Score)
 

@@ -15,13 +15,13 @@ type User struct {
 }
 
 // isDefault проверяет, переданы ли какие-либо данные в структуру User.
-func (n *User) isDefault() bool {
-	return n.Id == 0 && n.Email == "" && n.Password == ""
+func (u *User) isDefault() bool {
+	return u.Id == 0 && u.Email == "" && u.Password == ""
 }
 
 // UsersTable предоставляет методы для работы с таблицей пользователей в базе данных.
 type UsersTable struct {
-	db *sql.DB // Указатель на подключение к базе данных
+	Db *sql.DB // Указатель на подключение к базе данных
 }
 
 func (ut *UsersTable) Add(u User) error {
@@ -31,13 +31,13 @@ func (ut *UsersTable) Add(u User) error {
 	}
 
 	//если норм, в бд все это дело
-	_, err := ut.db.Exec(`INSERT INTO Users (email, password, is_premium)
-		SELECT $1, $2, $3
+	_, err := ut.Db.Exec(`INSERT INTO Users (email, password)
+		SELECT CAST($1 AS VARCHAR), CAST($2 AS VARCHAR)
 		WHERE NOT EXISTS (
 			SELECT 1 FROM users
 			WHERE email = $1
 		)`,
-		u.Email, u.Password, u.IsPremium)
+		u.Email, u.Password)
 
 	// проебы по ходу добавления ловим
 	if err != nil {
@@ -60,7 +60,7 @@ func (ut *UsersTable) GetById(u User) (*User, error) {
 		return nil, errors.New("User.GetById: wrong data! provided *User is empty")
 	}
 
-	row := ut.db.QueryRow(`SELECT email, password, is_premium
+	row := ut.Db.QueryRow(`SELECT email, password, is_premium
 		FROM users
 		WHERE id = $1`,
 		u.Id)
@@ -91,7 +91,7 @@ func (ut *UsersTable) Delete(u *User) error {
 		return errors.New("User.Delete: wrong data! provided userID is empty")
 	}
 
-	_, err := ut.db.Exec(
+	_, err := ut.Db.Exec(
 		"DELETE FROM users WHERE id = $1",
 		u.Id,
 	)
@@ -109,5 +109,5 @@ func newUsersTable(db *sql.DB, query string) (*UsersTable, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create receipts table: %v", err)
 	}
-	return &UsersTable{db: db}, nil
+	return &UsersTable{Db: db}, nil
 }
