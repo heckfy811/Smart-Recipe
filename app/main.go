@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"smart-recipe/api"
 	"smart-recipe/database"
 )
 
 func main() {
 	database.NewDatabaseInstance()
-	fmt.Println("Done")
+
+	server := api.APIServer{Addr: "localhost:8080"}
+	server.Run()
 }
