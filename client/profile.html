@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - SmartRecipe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: #28a745;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .profile-header a {
+            font-size: 14px;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-info img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+            background: #ddd;
+        }
+        .profile-content h2 {
+            margin-bottom: 20px;
+        }
+        .recipe-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .recipe-card {
+            flex: 1 1 calc(33.333% - 20px);
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .recipe-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .recipe-card .card-content {
+            padding: 20px;
+        }
+        .recipe-card h3 {
+            margin-bottom: 10px;
+        }
+        .recipe-card .price {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function checkAuthentication() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            if (!isAuthenticated) {
+                alert('Пожалуйста, войдите в систему!');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            window.location.href = 'auth.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', checkAuthentication);
+    </script>
+</head>
+<body>
+    <div class="container profile-wrapper">
+        <header class="profile-header">
+            <h1>Мой профиль</h1>
+            <a href="#" onclick="logout()">Выйти из аккаунта</a>
+        </header>
+
+        <section class="profile-info">
+            <img src="https://via.placeholder.com/80" alt="Фото профиля">
+            <div>
+                <p><strong>Имя пользователя:</strong> Nickname</p>
+                <p><strong>Номер телефона:</strong> +7 999 999 99 99</p>
+                <p><strong>Email:</strong> test@mail.ru</p>
+                <a href="#">Редактировать данные профиля</a>
+            </div>
+        </section>
+
+        <section class="profile-content">
+            <h2>Избранное</h2>
+            <div class="recipe-list">
+                <div class="recipe-card">
+                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
+                    <div class="card-content">
+                        <h3>Лазанья из свиной шейки</h3>
+                        <p class="price">650 ₽</p>
+                        <a href="#">Посмотреть</a>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
+                    <div class="card-content">
+                        <h3>Тушёная говядина</h3>
+                        <p class="price">650 ₽</p>
+                        <a href="#">Посмотреть</a>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
+                    <div class="card-content">
+                        <h3>Сэндвич с яйцом пашот</h3>
+                        <p class="price">650 ₽</p>
+                        <a href="#">Посмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
