@@ -19,6 +19,7 @@ type DatabaseRepository struct {
 	Products        *ProductsTable
 	Shops           *ShopsTable
 	Roles           *RolesTable
+	RecipeImages    *RecipeImagesTable
 }
 
 func initConfig() {
@@ -74,6 +75,10 @@ func (st *DatabaseRepository) connectTables(db *sql.DB) {
 		return
 	}
 	if st.MealPlans, err = newMealPlansTable(db); err != nil {
+		log.Fatal(err)
+		return
+	}
+	if st.RecipeImages, err = newRecipeImagesTable(db); err != nil {
 		log.Fatal(err)
 		return
 	}
