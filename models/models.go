@@ -41,15 +41,16 @@ type Product struct {
 }
 
 type Recipe struct {
-	Id            int     `json:"id"`
-	Title         string  `json:"title"`
-	Description   string  `json:"description"`
-	Instructions  string  `json:"instructions"`
-	Kilocalories  float64 `json:"kilocalories"`
-	Proteins      float64 `json:"proteins"`
-	Fats          float64 `json:"fats"`
-	Carbohydrates float64 `json:"carbohydrates"`
-	Score         float64 `json:"score"`
+	Id            int            `json:"id"`
+	Title         string         `json:"title"`
+	Description   string         `json:"description"`
+	Instructions  string         `json:"instructions"`
+	Kilocalories  float64        `json:"kilocalories"`
+	Proteins      float64        `json:"proteins"`
+	Fats          float64        `json:"fats"`
+	Carbohydrates float64        `json:"carbohydrates"`
+	Score         float64        `json:"score"`
+	Images        []*RecipeImage `json:"images"`
 }
 
 type Role struct {
@@ -70,4 +71,10 @@ type User struct {
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
 	RoleId   int    `json:"role"`
+}
+
+type RecipeImage struct {
+	Id        int    `json:"id"`
+	RecipeId  int    `json:"recipe_id"`
+	ImagePath string `json:"image"`
 }
