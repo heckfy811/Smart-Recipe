@@ -4,16 +4,18 @@ import (
 	"SmartRecipe/database"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 func DeleteRecipeHandler(c *gin.Context) {
-	recipeId, err := strconv.Atoi(c.Param("id"))
+	var req struct {
+		Id int `json:"id"`
+	}
+	err := c.ShouldBindJSON(&req.Id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.Database.Recipes.DeleteRecipe(recipeId)
+	err = database.Database.Recipes.DeleteRecipe(req.Id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -22,17 +24,15 @@ func DeleteRecipeHandler(c *gin.Context) {
 }
 
 func DeleteIngredientHandler(c *gin.Context) {
-
-	IngredientId, err := strconv.Atoi(c.Param("id"))
+	var req struct {
+		Id int `json:"id"`
+	}
+	err := c.ShouldBindJSON(&req.Id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if IngredientId < 1 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Ingredient id should be greater than 0"})
-		return
-	}
-	err = database.Database.Ingredients.DeleteIngredient(IngredientId)
+	err = database.Database.Ingredients.DeleteIngredient(req.Id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
