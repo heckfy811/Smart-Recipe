@@ -1,0 +1,185 @@
+/* Основные стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+}
+
+/* Навигационная панель */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: white;  
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: 600;
+  padding-left: 120px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.smart {
+  color: #12A370;
+  display: inline;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  padding-right: 120px;
+}
+
+.nav-links li {
+  margin-left: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+}
+
+a {
+  color: black;
+}
+
+.profile-btn {
+  padding: 8px 15px;
+  text-decoration: none;
+  border: 1px solid #12A370;
+  border-radius: 20px;
+  color: #12A370;
+}
+
+/* Секция "Планы" */
+.plans {
+  padding: 50px;
+  background-color: white;
+}
+
+.plans h2 {
+  display: inline-block;
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.plans-grid {
+  display: flex;
+  justify-content: space-between;
+}
+
+.plan-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
+  padding-bottom: 30px;
+  width: 30%;
+  text-align: center;
+}
+
+.plan-card img {
+  width: 100%;
+}
+
+.plan-card h3 {
+  margin: 15px 0;
+  font-weight: 500;
+}
+
+.btn-small {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #12A370;
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+/* Подписка */
+.subscription {
+  margin-top: 150px;
+  height: 454px;
+  background-image: url(images/background.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+}
+
+.subscription-text {
+  background-color: #33333370;
+  border-radius: 25px;
+  padding: 50px;
+}
+
+/* Добавить рацион */
+.add-plan {
+  display: flex;
+  justify-content: center;
+  color: #12A370;
+  border: solid 1px #12A370;
+  padding: 10px 0px;
+  margin: 40px 120px;
+  font-size: 24px;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Подвал */
+footer {
+  background-color: #12A370;
+  padding: 40px;
+  color: white;
+  margin-top: 50px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-logo h3 {
+  margin-bottom: 10px;
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.footer-social img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.footer-social p {
+  text-align: left;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.footer p {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}

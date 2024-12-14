@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartRecipe</title>
-    <link rel="stylesheet" href="css/styles-main.css">
+    <title>Профиль - SmartRecipe</title>
+    <link rel="stylesheet" href="css/styles-favorite.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -24,27 +24,18 @@
         </nav>
     </header>
 
-    <!-- Главный баннер -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Вкусные рецепты & Выгодные покупки</h1>
-            <p>Выбирайте, чем себя побаловать, а мы поможем сделать с наибольшей выгодой и удобством</p>
-            <div class="hero-buttons">
-                <a href="recipes.html" class="btn">Рецепты</a>
-                <a href="#" class="btn-outline">Подписка</a>
+    <!-- Секция "Избранное" -->
+    <section class="favorite">
+        <div class="top">
+          <h2>Избранное</h2>
+          <div class="search-container">
+            <div id="search-bar" class="search-bar">
+              <input type="text" placeholder="Введите запрос..." class="search-input">
+              <button class="submit-btn">Найти</button>
             </div>
+            <button id="search-btn" class="search-btn">Поиск</button>
+          </div>
         </div>
-        <div class="hero-images">
-            <img src="images/img1.png">
-            <img src="images/img2.png">
-            <img src="images/img3.png">
-        </div>
-    </section>
-
-    <!-- Секция "Сейчас популярно" -->
-    <section class="popular-recipes">
-        <h2>Сейчас популярно</h2>
-        <a href="#" class="view-all">Посмотреть все →</a>
         <div class="recipes-grid">
             <div class="recipe-card">
                 <img src="images/lasagna.png" alt="Лазанья">
@@ -70,35 +61,25 @@
         </div>
     </section>
 
-    <!-- Подиска -->
-    <section class="subscription">
-      <div class="subscription-text">
-        <p>Приобретите подписку для готовых планов питания, рассчитыннах для разных рационов</p>
-        <a href="#" class="subscription-button">Подробнее</a>
-      </div>
-    </section>
+    <script>
+      const searchBtn = document.getElementById("search-btn");
+      const searchBar = document.getElementById("search-bar");
 
-    <!-- Секция "Лучший рецепт" -->
-    <section class="best-recipe">
-        <h2>Лучший рецепт</h2>
-        <div class="best-recipe-card">
-            <img src="images/dumplings.png" alt="Домашние пельмени" class="best-recipe-card-img">
-            <div class="additional-images">
-              <img src="images/dumplings1.png" alt="Шаг 1">
-              <img src="images/dumplings2.png" alt="Шаг 2">
-              <img src="images/dumplings3.png" alt="Шаг 3">
-            </div>
-            <div class="recipe-info">
-                <h3>Домашние Пельмени</h3>
-                <br>
-                <p>Время готовки 30 минут</p>
-                <br>
-                <p>Домашние пельмени – это идеальное сочетание тонкого теста и сочной, ароматной начинки. Их можно приготовить с разнообразными начинками, от классического мясного фарша до необычных вкусов с грибами или овощами. Пельмени не только вкусные, но и питательные, их легко готовить для всей семьи.
-                  Их можно подавать с любыми соусами: сметаной, уксусом или бульоном, что делает их универсальным блюдом на любой вкус. Приготовление пельменей своими руками – это отличный способ создать домашний уют и порадовать близких.</p>
-                <a href="#" class="btn-small">Попробовать рецепт</a>
-            </div>
-        </div>
-    </section>
+      searchBtn.addEventListener("click", () => {
+        searchBar.classList.toggle("active");
+
+        if (searchBar.classList.contains("active")) {
+          setTimeout(() => {
+          searchBar.style.display = "flex";
+          }, 0);
+        }
+        else {
+          setTimeout(() => {
+          searchBar.style.display = "none";
+          }, 500);
+        }
+      });
+    </script>
 
     <!-- Footer -->
     <footer>

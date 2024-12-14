@@ -1,156 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль - SmartRecipe</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            line-height: 1.6;
-        }
-        a {
-            text-decoration: none;
-            color: #28a745;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .profile-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .profile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 40px;
-        }
-        .profile-header a {
-            font-size: 14px;
-            color: #28a745;
-            font-weight: bold;
-        }
-        .profile-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-info img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-right: 20px;
-            object-fit: cover;
-            background: #ddd;
-        }
-        .profile-content h2 {
-            margin-bottom: 20px;
-        }
-        .recipe-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .recipe-card {
-            flex: 1 1 calc(33.333% - 20px);
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .recipe-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        .recipe-card .card-content {
-            padding: 20px;
-        }
-        .recipe-card h3 {
-            margin-bottom: 10px;
-        }
-        .recipe-card .price {
-            color: #28a745;
-            font-weight: bold;
-        }
-    </style>
-    <script>
-        function checkAuthentication() {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-            if (!isAuthenticated) {
-                alert('Пожалуйста, войдите в систему!');
-                window.location.href = 'auth.html';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('isAuthenticated');
-            window.location.href = 'auth.html';
-        }
-
-        document.addEventListener('DOMContentLoaded', checkAuthentication);
-    </script>
+    <link rel="stylesheet" href="css/styles-profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container profile-wrapper">
-        <header class="profile-header">
-            <h1>Мой профиль</h1>
-            <a href="#" onclick="logout()">Выйти из аккаунта</a>
-        </header>
+<body vlink="#fff" alink="#fff">
+    <!-- Навигационная панель -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><div class="smart">Smart</div>.Recipe</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="recipes.html">Рецепты</a></li>
+                <li><a href="plans.html">Планы питания</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="profile.html" class="profile-btn">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <section class="profile-info">
-            <img src="https://via.placeholder.com/80" alt="Фото профиля">
-            <div>
-                <p><strong>Имя пользователя:</strong> Nickname</p>
-                <p><strong>Номер телефона:</strong> +7 999 999 99 99</p>
-                <p><strong>Email:</strong> test@mail.ru</p>
-                <a href="#">Редактировать данные профиля</a>
-            </div>
-        </section>
+    <!-- Секция "Мой профиль" -->
+    <section class="profile">
+            <h2>Мой профиль</h2>
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <img src="images/default-avatar.png" alt="Аватар">
+                    <button class="btn edit-avatar-btn">Изменить фото</button>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-field">
+                        <label>Имя пользователя</label>
+                        <input type="text" value="Nickname" readonly>
+                    </div>
+                    <div class="profile-field">
+                        <label>Номер телефона</label>
+                        <input type="text" value="Phone number" readonly>
+                    </div>
+                    <div class="profile-field">
+                        <label>Адрес электронной почты</label>
+                        <input type="email" value="Email" readonly>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn edit-profile-btn">Редактировать данные профиля</button>
+                        <button class="btn logout-btn">Выйти из аккаунта</button>
+                    </div>
+                </div>
+            </div>  
+    </section>
 
-        <section class="profile-content">
+    <!-- Секция "Избранное" -->
+    <section class="favorite">
+        <div class="top">
             <h2>Избранное</h2>
-            <div class="recipe-list">
-                <div class="recipe-card">
-                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
-                    <div class="card-content">
-                        <h3>Лазанья из свиной шейки</h3>
-                        <p class="price">650 ₽</p>
-                        <a href="#">Посмотреть</a>
-                    </div>
-                </div>
-                <div class="recipe-card">
-                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
-                    <div class="card-content">
-                        <h3>Тушёная говядина</h3>
-                        <p class="price">650 ₽</p>
-                        <a href="#">Посмотреть</a>
-                    </div>
-                </div>
-                <div class="recipe-card">
-                    <img src="https://via.placeholder.com/300x180" alt="Рецепт">
-                    <div class="card-content">
-                        <h3>Сэндвич с яйцом пашот</h3>
-                        <p class="price">650 ₽</p>
-                        <a href="#">Посмотреть</a>
-                    </div>
-                </div>
+            <a href="favorite.html" class="view-all">Посмотреть все →</a>
+        </div>
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <img src="images/lasagna.png" alt="Лазанья">
+                <h3>Лазанья из свиной шейки</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
             </div>
-        </section>
-    </div>
+            <div class="recipe-card">
+                <img src="images/beef.png" alt="Тушёная говядина">
+                <h3>Тушёная говядина</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
+            </div>
+            <div class="recipe-card">
+                <img src="images/sandwich.png" alt="Сэндвич">
+                <h3>Сэндвич с яйцом пашот</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция "История" -->
+    <section class="history">
+        <div class="top">
+            <h2>История опробованных рецептов</h2>
+            <a href="history.html" class="view-all">Посмотреть все →</a>
+        </div>
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <img src="images/lasagna.png" alt="Лазанья">
+                <h3>Лазанья из свиной шейки</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
+            </div>
+            <div class="recipe-card">
+                <img src="images/beef.png" alt="Тушёная говядина">
+                <h3>Тушёная говядина</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
+            </div>
+            <div class="recipe-card">
+                <img src="images/sandwich.png" alt="Сэндвич">
+                <h3>Сэндвич с яйцом пашот</h3>
+                <p>650Р</p>
+                <span>4.5 ★★★★☆</span>
+                <a href="recipe.html" class="btn-small">Посмотреть</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подиска -->
+    <section class="subscription">
+      <div class="subscription-text">
+        <p>Приобретите подписку для готовых планов питания, рассчитыннах для разных рационов</p>
+        <a href="#" class="subscription-button">Подробнее</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>Smart.Recipe</h3>
+                <p>Готовьте вкусно и недорого</p>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Контакты</a></li>
+                    <li><a href="#">Политика конфиденциальности</a></li>
+                    <li><a href="#">Условия использования</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <p>Контакты</p>
+                <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
+                <p>2024 @smartrecipe.com</p>
+            </div>
+        </div>
+        <p>2024 © SmartRecipe</p>
+    </footer>
 </body>
 </html>
