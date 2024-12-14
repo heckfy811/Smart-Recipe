@@ -94,7 +94,7 @@ func (it *IngredientsTable) GetIngredientById(id int) (*models.Ingredient, error
 	return ingredient, nil
 }
 
-func (it *IngredientsTable) GetIngredientsByRecipeId(recipeId int) ([]models.Ingredient, error) {
+func (it *IngredientsTable) GetIngredientsByRecipeId(recipeId int) ([]*models.Ingredient, error) {
 	query := `
     SELECT id, recipe_id, title, product_category, product_subcategory, quantity 
     FROM ingredients 
@@ -104,13 +104,13 @@ func (it *IngredientsTable) GetIngredientsByRecipeId(recipeId int) ([]models.Ing
 		return nil, fmt.Errorf("error getting ingredients by recipe id: %v", err)
 	}
 	defer rows.Close()
-	var ingredients []models.Ingredient
+	var ingredients []*models.Ingredient
 	for rows.Next() {
 		var ingredient models.Ingredient
 		if err := rows.Scan(&ingredient.Id, &ingredient.RecipeId, &ingredient.Title, &ingredient.Category, &ingredient.SubCategory, &ingredient.Quantity); err != nil {
 			return nil, fmt.Errorf("error scanning ingredient: %v", err)
 		}
-		ingredients = append(ingredients, ingredient)
+		ingredients = append(ingredients, &ingredient)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, fmt.Errorf("error with rows result: %v", err)

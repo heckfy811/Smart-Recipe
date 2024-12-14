@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/lib/pq"
 	"log"
 )
 
@@ -30,13 +31,18 @@ func newUsersTable(db *sql.DB) (*UsersTable, error) {
 	return &UsersTable{db}, nil
 }
 
-func (ut *UsersTable) AddUser(u *models.User) error {
-	query := `INSERT INTO users (name, surname, email, password, role_id) VALUES ($1, $2, $3, $4, $5);`
-	_, err := ut.db.Exec(query, u.Name, u.Surname, u.Email, u.Password, u.RoleId)
+func (ut *UsersTable) AddUser(u *models.User) (int, error) {
+	var id int
+	query := `INSERT INTO users (name, surname, email, password, role_id) VALUES ($1, $2, $3, $4, $5) RETURNING id;`
+	err := ut.db.QueryRow(query, u.Name, u.Surname, u.Email, u.Password, u.RoleId).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("error adding user: %v", err)
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+			return 0, fmt.Errorf("email already exists")
+		}
+		return 0, fmt.Errorf("error adding user: %v", err)
 	}
-	return nil
+	return id, nil
 }
 
 func (ut *UsersTable) GetUserById(id int) (*models.User, error) {
