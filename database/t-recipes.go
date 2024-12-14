@@ -33,23 +33,36 @@ func newRecipesTable(db *sql.DB) (*RecipesTable, error) {
 	return &RecipesTable{db}, nil
 }
 
-func (rt *RecipesTable) GetRecipes(limit, offset int) ([]*models.Recipe, error) {
-	var totalCount int
-	countQuery := `SELECT COUNT(*) FROM recipes`
-	err := rt.db.QueryRow(countQuery).Scan(&totalCount)
-	if err != nil {
-		return nil, fmt.Errorf("error getting total recipes count: %v", err)
-	}
-
-	if offset >= totalCount {
-		return []*models.Recipe{}, nil
-	}
+func (rt *RecipesTable) GetRecipes(limit int, filter string) ([]*models.Recipe, error) {
 	query := `
     SELECT id, title, description, instructions, kilocalories, proteins, fats, carbohydrates, score
-    FROM recipes
-    ORDER BY id
-    LIMIT $1 OFFSET $2`
-	rows, err := rt.db.Query(query, limit, offset)
+    FROM recipes`
+	if filter == "recent" {
+		query += `
+		ORDER BY id DESC
+		LIMIT $1`
+	} else if filter == "high-caloric" {
+		query += `
+		ORDER BY kilocalories DESC
+		LIMIT $1`
+	} else if filter == "low-caloric" {
+		query += `
+		ORDER BY kilocalories
+		LIMIT $1`
+	} else if filter == "title" {
+		query += `
+		ORDER BY title
+		LIMIT $1`
+	} else if filter == "score" {
+		query += `
+		ORDER BY score DESC
+		LIMIT $1`
+	} else {
+		query += `
+		ORDER BY id
+    	LIMIT $1`
+	}
+	rows, err := rt.db.Query(query, limit)
 	if err != nil {
 		return nil, fmt.Errorf("error getting recipes: %v", err)
 	}
@@ -60,18 +73,83 @@ func (rt *RecipesTable) GetRecipes(limit, offset int) ([]*models.Recipe, error) 
 		if err := rows.Scan(&recipe.Id, &recipe.Title, &recipe.Description, &recipe.Instructions, &recipe.Kilocalories, &recipe.Proteins, &recipe.Fats, &recipe.Carbohydrates, &recipe.Score); err != nil {
 			return nil, fmt.Errorf("error scanning recipe: %v", err)
 		}
+		imagesQuery := `SELECT id, recipe_id, image_path FROM recipe_images WHERE recipe_id = $1`
+		images, err := rt.db.Query(imagesQuery, recipe.Id)
+		if err != nil {
+			return nil, fmt.Errorf("error getting recipe images: %v", err)
+		}
+		var Images []*models.RecipeImage
+		for images.Next() {
+			var image models.RecipeImage
+			if err := images.Scan(&image.Id, &image.RecipeId, &image.ImagePath); err != nil {
+				return nil, fmt.Errorf("error scanning recipe image: %v", err)
+			}
+			Images = append(Images, &image)
+		}
+		recipe.Images = Images
 		recipes = append(recipes, &recipe)
 	}
 	return recipes, nil
 }
 
-func (rt *RecipesTable) AddRecipe(r *models.Recipe) error {
-	query := `INSERT INTO recipes (title, description, instructions, kilocalories, proteins, fats, carbohydrates, score) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
-	_, err := rt.db.Exec(query, r.Title, r.Description, r.Instructions, r.Kilocalories, r.Proteins, r.Fats, r.Carbohydrates, r.Score)
-	if err != nil {
-		return fmt.Errorf("error adding recipe: %v", err)
+func (rt *RecipesTable) GetRecipesByTitle(limit int, filter, search string) ([]*models.Recipe, error) {
+	query := `
+    SELECT id, title, description, instructions, kilocalories, proteins, fats, carbohydrates, score
+    FROM recipes
+    WHERE (title ILIKE '%' || $1 || '%' OR SIMILARITY(title, $1) > 0.2)`
+	if filter == "recent" {
+		query += `
+		ORDER BY id DESC
+		LIMIT $2`
+	} else if filter == "high-caloric" {
+		query += `
+		ORDER BY kilocalories DESC
+		LIMIT $2`
+	} else if filter == "low-caloric" {
+		query += `
+		ORDER BY kilocalories
+		LIMIT $2`
+	} else if filter == "title" {
+		query += `
+		ORDER BY title
+		LIMIT $2`
+	} else if filter == "score" {
+		query += `
+		ORDER BY score DESC
+		LIMIT $2`
+	} else {
+		query += `
+		ORDER BY SIMILARITY(title, $1) DESC
+    	LIMIT $2`
 	}
-	return nil
+	rows, err := rt.db.Query(query, search, limit)
+	if err != nil {
+		return nil, fmt.Errorf("error getting recipes: %v", err)
+	}
+	defer rows.Close()
+	var recipes []*models.Recipe
+	for rows.Next() {
+		var recipe models.Recipe
+		if err := rows.Scan(&recipe.Id, &recipe.Title, &recipe.Description, &recipe.Instructions, &recipe.Kilocalories, &recipe.Proteins, &recipe.Fats, &recipe.Carbohydrates, &recipe.Score); err != nil {
+			return nil, fmt.Errorf("error scanning recipe: %v", err)
+		}
+		imagesQuery := `SELECT id, recipe_id, image_path FROM recipe_images WHERE recipe_id = $1`
+		images, err := rt.db.Query(imagesQuery, recipe.Id)
+		if err != nil {
+			return nil, fmt.Errorf("error getting recipe images: %v", err)
+		}
+		var Images []*models.RecipeImage
+		for images.Next() {
+			var image models.RecipeImage
+			if err := images.Scan(&image.Id, &image.RecipeId, &image.ImagePath); err != nil {
+				return nil, fmt.Errorf("error scanning recipe image: %v", err)
+			}
+			Images = append(Images, &image)
+		}
+		recipe.Images = Images
+		recipes = append(recipes, &recipe)
+	}
+	return recipes, nil
 }
 
 func (rt *RecipesTable) GetRecipeById(id int) (*models.Recipe, error) {
@@ -92,7 +170,19 @@ func (rt *RecipesTable) GetRecipeById(id int) (*models.Recipe, error) {
 		}
 		return nil, fmt.Errorf("error getting recipe by id: %v", err)
 	}
-
+	imagesQuery := `SELECT id, recipe_id, image_path FROM recipe_images WHERE recipe_id = $1`
+	images, err := rt.db.Query(imagesQuery, id)
+	if err != nil {
+		return nil, fmt.Errorf("error getting recipe images: %v", err)
+	}
+	var Images []*models.RecipeImage
+	for images.Next() {
+		var image models.RecipeImage
+		if err := images.Scan(&image.Id, &image.RecipeId, &image.ImagePath); err != nil {
+			return nil, fmt.Errorf("error scanning recipe image: %v", err)
+		}
+		Images = append(Images, &image)
+	}
 	r := &models.Recipe{
 		Id:            id,
 		Title:         title,
@@ -103,9 +193,20 @@ func (rt *RecipesTable) GetRecipeById(id int) (*models.Recipe, error) {
 		Fats:          fats,
 		Carbohydrates: carbohydrates,
 		Score:         score,
+		Images:        Images,
 	}
 
 	return r, nil
+}
+
+func (rt *RecipesTable) AddRecipe(r *models.Recipe) (int, error) {
+	var id int
+	query := `INSERT INTO recipes (title, description, instructions, kilocalories, proteins, fats, carbohydrates, score) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;`
+	err := rt.db.QueryRow(query, r.Title, r.Description, r.Instructions, r.Kilocalories, r.Proteins, r.Fats, r.Carbohydrates, r.Score).Scan(&id)
+	if err != nil {
+		return -1, fmt.Errorf("error adding recipe: %v", err)
+	}
+	return id, nil
 }
 
 func (rt *RecipesTable) DeleteRecipe(id int) error {
