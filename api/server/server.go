@@ -13,12 +13,13 @@ type APIServer struct {
 func (s *APIServer) Run() error {
 	app := gin.Default()
 
-	app.GET("/", handlers.GetIndexHandler) // Главная страница с авторизацией
+	app.GET("/", handlers.GetIndexHandler)
 	openGroup := app.Group("/o")
 	{
 		openGroup.POST("/signup", handlers.SignUp)
 		openGroup.POST("/login", handlers.Login)
-		openGroup.POST("/refresh", handlers.RefreshToken)
+		openGroup.GET("/refresh", handlers.RefreshToken)
+		openGroup.GET("/auth", handlers.GetAuthPageHandler) // Авторизация
 	}
 	closeGroup := app.Group("/c", handlers.AuthMiddleware())
 	{
@@ -50,10 +51,11 @@ func (s *APIServer) Run() error {
 			}
 			recipeManagement := admin.Group("/recipes")
 			{
-				recipeManagement.POST("/add/recipe", handlers.PostRecipeHandler)
+				recipeManagement.POST("/add/recipes", handlers.PostRecipesHandler)
 				recipeManagement.POST("/add/ingredients", handlers.PostIngredientsHandler)
-				recipeManagement.DELETE("/delete/recipe/:id", handlers.DeleteRecipeHandler)
-				recipeManagement.DELETE("/delete/ingredient/:id", handlers.DeleteIngredientHandler)
+				//recipeManagement.POST("/add/images") Потом добавить надо
+				recipeManagement.DELETE("/delete/recipe", handlers.DeleteRecipeHandler)
+				recipeManagement.DELETE("/delete/ingredient", handlers.DeleteIngredientHandler)
 			}
 
 		}
