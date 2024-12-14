@@ -16,11 +16,23 @@ import (
 )
 
 func GetIndexHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "index"})
+	c.Redirect(http.StatusSeeOther, "/c/smart_recipe")
+}
+
+func GetAuthPageHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "nasik auth pageee"})
 }
 
 func GetMainPageHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "main page"})
+	recipes, err := database.Database.Recipes.GetRecipes(3, "recent")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"message":        "success",
+		"recently_added": recipes,
+	})
 }
 
 func GetRecipesHandler(c *gin.Context) {
@@ -33,10 +45,27 @@ func GetRecipesHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit must be greater than 0"})
 		return
 	}
-	recipes, err := database.Database.Recipes.GetRecipes(limit*10, 0)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	filter := c.Query("filter")
+	search, exists := c.GetQuery("search")
+	var recipes []*models.Recipe
+	if !exists {
+		recipes, err = database.Database.Recipes.GetRecipes(limit*10, filter)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		recipes, err = database.Database.Recipes.GetRecipesByTitle(limit*10, filter, search)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if len(recipes) == 0 {
+			c.JSON(http.StatusNoContent, gin.H{
+				"message": "no recipes found",
+			})
+			return
+		}
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"message": "success",
@@ -225,7 +254,7 @@ func GetNearestShopHandler(c *gin.Context) {
 	var res []p
 	var sum float64
 	for _, i := range ingredients {
-		price, err := database.Database.Products.GetIngredientPriceFromShop(nearestShop.Id, &i)
+		price, err := database.Database.Products.GetIngredientPriceFromShop(nearestShop.Id, i)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
