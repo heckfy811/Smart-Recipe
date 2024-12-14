@@ -34,13 +34,13 @@ type LoginRequest struct {
 func SignUp(c *gin.Context) {
 	var req SignUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request payload"})
 		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -51,17 +51,14 @@ func SignUp(c *gin.Context) {
 		Password: string(hashedPassword),
 		RoleId:   1,
 	}
-
-	if err := database.Database.Users.AddUser(user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
-		log.Println(err)
-		return
-	}
-
-	// Обновляем данные пользователя, чтобы убедиться, что ID установлен
-	newUser, err := database.Database.Users.GetUserByEmail(user.Email)
+	newUserId, err := database.Database.Users.AddUser(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve user"})
+		if err.Error() == "User already exists" {
+			c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Println(err)
 		return
 	}
 
@@ -69,14 +66,14 @@ func SignUp(c *gin.Context) {
 	refreshTokenExpirationTime := time.Now().Add(24 * time.Hour)
 
 	accessClaims := &Claims{
-		UserID: strconv.Itoa(int(newUser.Id)),
+		UserID: strconv.Itoa(newUserId),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: accessTokenExpirationTime.Unix(),
 		},
 	}
 
 	refreshClaims := &Claims{
-		UserID: strconv.Itoa(newUser.Id),
+		UserID: strconv.Itoa(newUserId),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: refreshTokenExpirationTime.Unix(),
 		},
@@ -85,14 +82,14 @@ func SignUp(c *gin.Context) {
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, accessClaims)
 	accessTokenString, err := accessToken.SignedString(jwtKey)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate access token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate access token"})
 		return
 	}
 
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
 	refreshTokenString, err := refreshToken.SignedString(jwtKey)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate refresh token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate refresh token"})
 		return
 	}
 	// Сохранение токенов в куки
@@ -115,13 +112,13 @@ func SignUp(c *gin.Context) {
 	http.SetCookie(c.Writer, accessCookie)
 	http.SetCookie(c.Writer, refreshCookie)
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
+	c.Redirect(http.StatusSeeOther, "/c/smart_recipe")
 }
 
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request payload"})
 		return
 	}
 
@@ -187,7 +184,7 @@ func Login(c *gin.Context) {
 	http.SetCookie(c.Writer, accessCookie)
 	http.SetCookie(c.Writer, refreshCookie)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+	c.Redirect(http.StatusSeeOther, "/c/smart_recipe")
 }
 
 func Logout(c *gin.Context) {
@@ -210,13 +207,13 @@ func Logout(c *gin.Context) {
 	http.SetCookie(c.Writer, accessCookie)
 	http.SetCookie(c.Writer, refreshCookie)
 
-	c.Redirect(http.StatusSeeOther, "/")
+	c.Redirect(http.StatusSeeOther, "/o/auth")
 }
 
 func RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("refresh_token")
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing or invalid refresh token"})
+		c.Redirect(http.StatusFound, "/o/auth")
 		return
 	}
 
@@ -226,7 +223,7 @@ func RefreshToken(c *gin.Context) {
 	})
 
 	if err != nil || !token.Valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid refresh token"})
+		c.Redirect(http.StatusFound, "/o/auth")
 		return
 	}
 
@@ -254,9 +251,6 @@ func RefreshToken(c *gin.Context) {
 		Secure:   true,
 	}
 	http.SetCookie(c.Writer, accessCookie)
-
-	c.JSON(http.StatusOK, gin.H{
-		"message":      "Token refreshed successfully",
-		"access_token": newAccessTokenString,
-	})
+	redirectURI := c.DefaultQuery("redirect_uri", "/")
+	c.Redirect(http.StatusFound, redirectURI)
 }

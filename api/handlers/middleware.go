@@ -13,10 +13,14 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString, err := c.Cookie("access_token")
 		if err != nil {
-			log.Println("Missing access token cookie")
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing access token cookie"})
-			c.Abort()
+			log.Println("Missing access token, attempting to refresh")
+			// Передаем исходный URL в параметре redirect_uri
+			redirectURL := c.Request.URL.Path
+			c.Redirect(http.StatusFound, "/o/refresh?redirect_uri="+redirectURL)
+			c.Abort() // Остановить дальнейшую обработку
 			return
+		} else {
+			log.Println("Access token found")
 		}
 
 		claims := &Claims{}
@@ -30,6 +34,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		log.Println("Token valid, proceeding")
 		c.Set("userId", claims.UserID)
 		c.Next()
 	}
