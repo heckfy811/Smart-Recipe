@@ -12,7 +12,7 @@ type APIServer struct {
 
 func (s *APIServer) Run() error {
 	app := gin.Default()
-	app.LoadHTMLGlob("front/*.html")
+	//app.LoadHTMLGlob("frontend/*.html")
 	app.GET("/", handlers.GetIndexHandler)
 
 	openGroup := app.Group("/o")
@@ -26,9 +26,9 @@ func (s *APIServer) Run() error {
 	closeGroup := app.Group("/c", handlers.AuthMiddleware())
 	{
 		closeGroup.GET("/smart_recipe", handlers.GetMainPageHandler)
-		closeGroup.Static("/images", "./front/images")
-		closeGroup.Static("/js", "./front/js")
-		closeGroup.Static("/css", "./front/css")
+		//closeGroup.Static("/images", "./frontend/images")
+		//closeGroup.Static("/js", "./frontend/js")
+		//closeGroup.Static("/css", "./frontend/css")
 		recipes := closeGroup.Group("/recipes")
 		{
 			recipes.GET("/list", handlers.GetRecipesHandler)
