@@ -179,12 +179,15 @@ a {
 }
 
 .recipe-card {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
   padding-bottom: 30px;
   width: 30%;
   text-align: center;
+  align-items: center;
 }
 
 .recipe-card img {
@@ -212,11 +215,26 @@ a {
   margin-top: 10px;
 }
 
+h5{
+  padding-top: 14px;
+  opacity: 60%;
+}
+
+span{
+  color:rgb(248, 203, 0);
+  font-size: 30px;
+}
+
+.stars{
+  display: flex;
+  gap: 5px;
+}
+
 /* Подписка */
 .subscription {
   margin-top: 150px;
   height: 454px;
-  background-image: url(images/background.png);
+  background-image: url(D:/универ/СПО/front/images/background.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

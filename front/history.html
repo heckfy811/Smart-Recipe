@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body vlink="#fff" alink="#fff">
     <!-- Навигационная панель -->
@@ -15,10 +16,10 @@
         <nav class="navbar">
             <a href="index.html" class="logo"><div class="smart">Smart</div>.Recipe</a>
             <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="recipes.html">Рецепты</a></li>
-                <li><a href="plans.html">Планы питания</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="index.html" class="head">Главная</a></li>
+                <li><a href="recipes.html" class="head">Рецепты</a></li>
+                <li><a href="plans.html" class="head">Планы питания</a></li>
+                <li><a href="about.html" class="head">О нас</a></li>
                 <li><a href="profile.html" class="profile-btn">Профиль</a></li>
             </ul>
         </nav>
@@ -34,6 +35,9 @@
               <button class="submit-btn">Найти</button>
             </div>
             <button id="search-btn" class="search-btn">Поиск</button>
+            <div class="filter">
+                <button id="filter-btn" class="filter-btn">Фильтры</button>
+            </div>
           </div>
         </div>
         <div class="recipes-grid">
@@ -41,25 +45,106 @@
                 <img src="images/lasagna.png" alt="Лазанья">
                 <h3>Лазанья из свиной шейки</h3>
                 <p>650Р</p>
-                <span>4.5 ★★★★☆</span>
-                <a href="recipe.html" class="btn-small">Посмотреть</a>
+                <div class="stars">
+                    <h5>4.5</h5>
+                    <span>★★★★☆</span>
+                </div>                <a href="recipe.html" class="btn-small" >Посмотреть</a>
             </div>
             <div class="recipe-card">
                 <img src="images/beef.png" alt="Тушёная говядина">
                 <h3>Тушёная говядина</h3>
                 <p>650Р</p>
-                <span>4.5 ★★★★☆</span>
-                <a href="recipe.html" class="btn-small">Посмотреть</a>
+                <div class="stars">
+                    <h5>4.5</h5>
+                    <span>★★★★☆</span>
+                </div>                <a href="recipe.html" class="btn-small">Посмотреть</a>
             </div>
             <div class="recipe-card">
                 <img src="images/sandwich.png" alt="Сэндвич">
                 <h3>Сэндвич с яйцом пашот</h3>
                 <p>650Р</p>
-                <span>4.5 ★★★★☆</span>
-                <a href="recipe.html" class="btn-small">Посмотреть</a>
+                <div class="stars">
+                    <h5>4.5</h5>
+                    <span>★★★★☆</span>
+                </div>                <a href="recipe.html" class="btn-small">Посмотреть</a>
             </div>
         </div>
     </section>
+
+    <aside class="filter-sidebar" id="filter-sidebar">
+        <div class="filter-header">
+            <h2>Фильтры</h2>
+            <button id="close-btn" class="close-btn">✕</button>
+        </div>
+        <div class="filter-content">
+            <!-- Цена -->
+            <div class="filter-section">
+                <p>Цена, руб.</p>
+                <div class="input-group">
+                    <input type="number" placeholder="От">
+                    <input type="number" placeholder="До">
+                </div>
+            </div>
+
+            <!-- Время приготовления -->
+            <div class="filter-section">
+                <p>Время приготовления, мин.</p>
+                <div class="input-group">
+                    <input type="number" placeholder="От">
+                    <input type="number" placeholder="До">
+                </div>
+            </div>
+
+            <!-- Категории -->
+            <div class="filter-section">
+                <p>Категория</p>
+                <ul>
+                    <li><input type="checkbox" id="category1"> <label for="category1">Первые блюда</label></li>
+                    <li><input type="checkbox" id="category2"> <label for="category2">Вторые блюда</label></li>
+                    <li><input type="checkbox" id="category3"> <label for="category3">Десерты</label></li>
+                    <li><input type="checkbox" id="category3"> <label for="category3">Закуски</label></li>
+                    <li><input type="checkbox" id="category3"> <label for="category3">Напитки</label></li>
+                </ul>
+            </div>
+
+            <!-- Кухни -->
+            <div class="filter-section">
+                <p>Кухня</p>
+                <ul>
+                    <li><input type="checkbox" id="cuisine1"> <label for="cuisine1">Итальянская</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Японская</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Русская</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Мексиканская</label></li>
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <p>Способ приготовления</p>
+                <ul>
+                    <li><input type="checkbox" id="cuisine1"> <label for="cuisine1">Варка</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Жарка</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Гриль</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">Запекание</label></li>
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <p>Калорийность</p>
+                <ul>
+                    <li><input type="checkbox" id="cuisine1"> <label for="cuisine1">До 300 ккал</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">От 301 до 500 ккал</label></li>
+                    <li><input type="checkbox" id="cuisine2"> <label for="cuisine2">От 501 ккал</label></li>
+                </ul>
+            </div>
+
+            <!-- Применить -->
+            <button class="apply-btn">Применить</button>
+        </div>
+    </aside>
+
+    <!-- Затемнение фона -->
+    <div class="overlay" id="overlay"></div>
+
 
     <script>
       const searchBtn = document.getElementById("search-btn");
@@ -90,7 +175,7 @@
             </div>
             <div class="footer-links">
                 <ul>
-                    <li><a href="#">О нас</a></li>
+                    <li><a href="about.html">О нас</a></li>
                     <li><a href="#">Контакты</a></li>
                     <li><a href="#">Политика конфиденциальности</a></li>
                     <li><a href="#">Условия использования</a></li>

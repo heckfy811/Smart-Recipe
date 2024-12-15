@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body vlink="#fff" alink="#fff">
     <!-- Навигационная панель -->
@@ -15,10 +16,10 @@
         <nav class="navbar">
             <a href="index.html" class="logo"><div class="smart">Smart</div>.Recipe</a>
             <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="recipes.html">Рецепты</a></li>
-                <li><a href="#">Планы питания</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="index.html" class="head">Главная</a></li>
+                <li><a href="recipes.html" class="head">Рецепты</a></li>
+                <li><a href="plans.html" class="head click">Планы питания</a></li>
+                <li><a href="about.html" class="head">О нас</a></li>
                 <li><a href="profile.html" class="profile-btn">Профиль</a></li>
             </ul>
         </nav>
@@ -54,7 +55,7 @@
     </section>
 
     <!-- Добавть рацион -->
-     <a href="#" class="add-plan">Добавить рацион</a>
+    <button id="addPlan" class="add-plan">Добавить рацион</button>
 
     <!-- Footer -->
     <footer>
@@ -65,7 +66,7 @@
             </div>
             <div class="footer-links">
                 <ul>
-                    <li><a href="#">О нас</a></li>
+                    <li><a href="about.html">О нас</a></li>
                     <li><a href="#">Контакты</a></li>
                     <li><a href="#">Политика конфиденциальности</a></li>
                     <li><a href="#">Условия использования</a></li>
@@ -81,5 +82,84 @@
         </div>
         <p>2024 © SmartRecipe</p>
     </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button id="closeModalBtn" class="close-btn">✖</button>
+            <h4>Заполните форму, чтобы искусственный интеллект смог подобрать вам подходящий рацион питания.</h4>
+    
+            <!-- Форма -->
+            <form>
+                <label>Калории: <input type="number" placeholder="ккал"></label>
+                <label>Белки: <input type="number" placeholder="г"></label>
+                <label>Жиры: <input type="number" placeholder="г"></label>
+                <label>Углеводы: <input type="number" placeholder="г"></label>
+                
+                <label>Предпочитаемая кухня: 
+                    <select>
+                        <option value="">Выберите...</option>
+                        <option>Итальянская</option>
+                        <option>Мексиканская</option>
+                        <option>Японская</option>
+                    </select>
+                </label>
+    
+                <label>Исключить продукты: 
+                    <select>
+                        <option value="">Выберите...</option>
+                        <option>Молочные</option>
+                        <option>Глютен</option>
+                        <option>Орехи</option>
+                    </select>
+                </label>
+    
+                <label>Моя цель: 
+                    <select>
+                        <option value="">Выберите...</option>
+                        <option>Похудение</option>
+                        <option>Набор массы</option>
+                        <option>Поддержание веса</option>
+                    </select>
+                </label>
+    
+                <label>Ваши пожелания: 
+                    <textarea placeholder="Введите текст..."></textarea>
+                </label>
+    
+                <button type="submit" class="submit-btn">Сгенерировать рацион</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const openModalBtn = document.getElementById("addPlan");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const modal = document.getElementById("modal");
+
+        // Открытие модального окна
+        
+        const originalColor = getComputedStyle(openModalBtn).color;
+        openModalBtn.addEventListener("mouseover", () => {
+            openModalBtn.style.backgroundColor = "12A370"; 
+        });
+        openModalBtn.addEventListener("mouseout", () => {
+            openModalBtn.style.backgroundColor = openModalBtn; 
+        });
+
+        openModalBtn.addEventListener("click", () => {
+            modal.style.display = "flex"; // Показываем модалку
+        });
+
+        // Закрытие модального окна
+        closeModalBtn.addEventListener("click", () => {
+            modal.style.display = "none"; // Скрываем модалку
+        });
+
+        // Закрытие модального окна при клике на затемнённый фон
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none"; // Скрываем модалку
+            }
+        });
+    </script>
 </body>
 </html>

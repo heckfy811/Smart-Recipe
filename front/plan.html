@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль - SmartRecipe</title>
+    <title>Рецепты - SmartRecipe</title>
     <link rel="stylesheet" href="css/styles-plan.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body vlink="#fff" alink="#fff">
     <!-- Навигационная панель -->
@@ -15,31 +16,100 @@
         <nav class="navbar">
             <a href="index.html" class="logo"><div class="smart">Smart</div>.Recipe</a>
             <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="recipes.html">Рецепты</a></li>
-                <li><a href="#">Планы питания</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="index.html" class="head">Главная</a></li>
+                <li><a href="recipes.html" class="head">Рецепты</a></li>
+                <li><a href="plans.html" class="head click">Планы питания</a></li>
+                <li><a href="about.html" class="head">О нас</a></li>
                 <li><a href="profile.html" class="profile-btn">Профиль</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Рацион -->
-    <section class="plan">
-      <div class="kbgu">
-        <div class="names">
-          <p>Калории</p>
-          <p>Белки</p>
-          <p>Жиры</p>
-          <p>Углеводы</p>
+    <!-- Секция "Наши рецепты" -->
+    <section class="ration">
+        <h1>Рацион 1</h1>
+        <!-- Блок с калорийностью -->
+        <div class="nutrition-info">
+            <div>Калории <br><strong>1800 кк</strong></div>
+            <div>Белки <br><strong>85 г</strong></div>
+            <div>Жиры <br><strong>44 г</strong></div>
+            <div>Углеводы <br><strong>119 г</strong></div>
         </div>
-        <div class="values">
-          <p>1800кк</p>
-          <p>85г</p>
-          <p>44г</p>
-          <p>119г</p>
+
+        <!-- Завтрак -->
+        <div class="meal-block">
+            <div class="recipe-top">
+                <h2>Завтрак</h2>
+                <p>КБЖУ: 400, 30, 11, 55</p>
+            </div>
+            <div class="recipes-grid">
+                <div class="recipe-card">
+                    <img src="images/lasagna.png" alt="Лазанья">
+                    <h3>Блюдо 1</h3>         
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+                <div class="recipe-card">
+                    <img src="images/beef.png" alt="Тушёная говядина">
+                    <h3>Блюдо 2</h3>
+               
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- Обед -->
+        <div class="meal-block">
+            <div class="recipe-top">
+                <h2>Обед</h2>
+                <p>КБЖУ: 800, 30, 11, 55</p>
+            </div>
+            <div class="recipes-grid">
+                <div class="recipe-card">
+                    <img src="images/lasagna.png" alt="Лазанья">
+                    <h3>Блюдо 1</h3>         
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+                <div class="recipe-card">
+                    <img src="images/beef.png" alt="Тушёная говядина">
+                    <h3>Блюдо 2</h3>
+               
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+                <div class="recipe-card">
+                    <img src="images/sandwich.png" alt="Сэндвич">
+                    <h3>Блюдо 3</h3>
+               
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ужин -->
+        <div class="meal-block">
+            <div class="recipe-top">
+                <h2>Ужин</h2>
+                <p>КБЖУ: 500, 30, 11, 55</p>
+            </div>
+            <div class="recipes-grid">
+                <div class="recipe-card">
+                    <img src="images/lasagna.png" alt="Лазанья">
+                    <h3>Блюдо 1</h3>         
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+                <div class="recipe-card">
+                    <img src="images/beef.png" alt="Тушёная говядина">
+                    <h3>Блюдо 2</h3>
+               
+                    <a href="recipe.html" class="btn-small">Посмотреть</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="pagination">
+            <a href="#">← Предыдущий рацион</a>
+            <a href="#">Следующий рацион →</a>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -51,7 +121,7 @@
             </div>
             <div class="footer-links">
                 <ul>
-                    <li><a href="#">О нас</a></li>
+                    <li><a href="about.html">О нас</a></li>
                     <li><a href="#">Контакты</a></li>
                     <li><a href="#">Политика конфиденциальности</a></li>
                     <li><a href="#">Условия использования</a></li>
@@ -68,4 +138,23 @@
         <p>2024 © SmartRecipe</p>
     </footer>
 </body>
+<script>
+    const searchBtn = document.getElementById("search-btn");
+    const searchBar = document.getElementById("search-bar");
+
+    searchBtn.addEventListener("click", () => {
+      searchBar.classList.toggle("active");
+
+      if (searchBar.classList.contains("active")) {
+        setTimeout(() => {
+        searchBar.style.display = "flex";
+        }, 0);
+      }
+      else {
+        setTimeout(() => {
+        searchBar.style.display = "none";
+        }, 500);
+      }
+    });
+</script>
 </html>

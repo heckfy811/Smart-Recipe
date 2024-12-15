@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body vlink="#fff" alink="#fff">
     <!-- Навигационная панель -->
@@ -15,10 +16,10 @@
         <nav class="navbar">
             <a href="index.html" class="logo"><div class="smart">Smart</div>.Recipe</a>
             <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="recipes.html">Рецепты</a></li>
-                <li><a href="plans.html">Планы питания</a></li>
-                <li><a href="about.html">О нас</a></li>
+                <li><a href="index.html" class="head">Главная</a></li>
+                <li><a href="recipes.html" class="head click">Рецепты</a></li>
+                <li><a href="plans.html" class="head">Планы питания</a></li>
+                <li><a href="about.html" class="head">О нас</a></li>
                 <li><a href="profile.html" class="profile-btn">Профиль</a></li>
             </ul>
         </nav>
@@ -28,7 +29,7 @@
     <div class="recipe">
       <h1>Тушёная говядина</h1>
       <br>
-      <!-- <img src="images/beef-background.png">-->
+      <img src="images/beef-background.png">
     </div>
 
     <!-- Секция "О рецепте" -->
@@ -73,8 +74,26 @@
         <li>За 30 минут до готовности добавьте морковь и продолжайте тушить до её мягкости.</li>
         <li>Перед подачей украсьте свежим кориандром.</li>
       </ol>
-  </div>
+    </div>
 
+    <section class="best-recipe">
+        <div class="best-recipe-card">
+            <img src="images/beef.png" alt="Домашние пельмени" class="best-recipe-card-img">
+            <div class="additional-images">
+              <img src="images/beef.png" alt="Шаг 1">
+              <img src="images/beef.png" alt="Шаг 2">
+              <img src="images/beef.png" alt="Шаг 3">
+            </div>
+            <div class="recipe-info">
+                <h3>Тушеная говядина</h3>
+                <p>Время готовки 180 минут</p>
+                <p>Ориентировочная стоимость блюда составляет: 2431</p>
+                <a href="near.html" class="btn-small">Рассчитать полную корзину</a>
+                <span>4.5 ★★★★☆</span>
+                <a href="#" class="feedback">Оставить отзыв</a>
+            </div>
+        </div>
+    </section>
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -84,7 +103,7 @@
             </div>
             <div class="footer-links">
                 <ul>
-                    <li><a href="#">О нас</a></li>
+                    <li><a href="about.html">О нас</a></li>
                     <li><a href="#">Контакты</a></li>
                     <li><a href="#">Политика конфиденциальности</a></li>
                     <li><a href="#">Условия использования</a></li>

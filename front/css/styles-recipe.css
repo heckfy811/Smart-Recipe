@@ -50,6 +50,10 @@ a {
   color: black;
 }
 
+.head.click{
+  color:#12A370;
+}
+
 .profile-btn {
   padding: 8px 15px;
   text-decoration: none;
@@ -102,6 +106,77 @@ li {
   margin-left: 30px;
 }
 
+.best-recipe {
+  margin-top: 120px;
+  padding: 50px;
+  background-color: white;
+}
+
+.best-recipe h2 {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.best-recipe-card {
+  display: flex;
+  justify-content: start;
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.best-recipe-card img {
+  border-radius: 25px;
+  padding: 30px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+}
+
+.recipe-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 50%;
+  text-align: left;
+  color:#333333;
+  gap: 10px;
+}
+
+.recipe-info h3 {
+  font-size: 2em;
+  color: #333333;
+}
+
+.recipe-info p {
+  font-size: 1em;
+  color: #333333;
+  opacity: 0.8;
+}
+
+.additional-images img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 180px;
+  margin-right: 100px;
+  margin-left: 0;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.btn-small {
+  display: inline;
+  width: 300px;
+  padding: 8px 15px;
+  background-color: #12A370;
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  text-align: center;
+}
+
 /* Подвал */
 footer {
   background-color: #12A370;
@@ -143,6 +218,7 @@ footer {
 }
 
 footer p {
+  color: white;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 30px;

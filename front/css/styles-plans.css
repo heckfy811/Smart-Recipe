@@ -50,6 +50,10 @@ a {
   color: black;
 }
 
+.head.click{
+  color:#12A370;
+}
+
 .profile-btn {
   padding: 8px 15px;
   text-decoration: none;
@@ -76,12 +80,15 @@ a {
 }
 
 .plan-card {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
   padding-bottom: 30px;
   width: 30%;
   text-align: center;
+  align-items: center;
 }
 
 .plan-card img {
@@ -107,7 +114,7 @@ a {
 .subscription {
   margin-top: 150px;
   height: 454px;
-  background-image: url(images/background.png);
+  background-image: url(D:/универ/СПО/front/images/background.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -124,18 +131,28 @@ a {
   padding: 50px;
 }
 
+
 /* Добавить рацион */
 .add-plan {
-  display: flex;
-  justify-content: center;
-  color: #12A370;
-  border: solid 1px #12A370;
-  padding: 10px 0px;
-  margin: 40px 120px;
-  font-size: 24px;
+  display: block; /* Превращает элемент в блочный */
+  margin: 50px auto; /* Верхний и нижний отступ 50px, автоцентрирование по горизонтали */
+  height: 50px;
+  width: 80%;
+  font-size: x-large;
+  background-color: white;
   text-decoration: none;
+  border: 1px solid #12A370;
   border-radius: 10px;
+  color: #12A370;
+  text-align: center;
+  cursor: pointer;
   box-shadow: 0 16px 16px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.add-plan:hover{
+  background-color: rgb(232, 232, 232);
 }
 
 /* Подвал */
@@ -182,4 +199,91 @@ footer {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 30px;
+}
+
+
+.modal {
+  display: none; /* Скрыто по умолчанию */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Затемненный фон */
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Контент внутри модального окна */
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px; /* Максимальная ширина */
+  max-height: 80vh; /* Ограничиваем высоту модального окна */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку при переполнении */
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+
+/* Кнопка закрытия модального окна */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Стили для формы */
+form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+.submit-btn {
+  display: inline-block;
+  background-color: #12a370;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #0f8a5c;
+}
+
+.open-modal-btn {
+  background-color: #12a370;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.open-modal-btn:hover {
+  background-color: #0f8a5c;
 }
