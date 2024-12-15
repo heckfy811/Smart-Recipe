@@ -481,12 +481,12 @@ func GetRatedRecipesHandler(c *gin.Context) {
 func GetMealPlansHandler(c *gin.Context) {
 	userIdStr, exists := c.Get("userId")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user ID not found"})
 		return
 	}
 	userId, err := strconv.Atoi(userIdStr.(string))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user ID format"})
 		return
 	}
 	q := c.DefaultQuery("limit", "1")

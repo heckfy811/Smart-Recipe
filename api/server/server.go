@@ -50,6 +50,7 @@ func (s *APIServer) Run() error {
 		{
 			mealPlans.GET("", handlers.GetMealPlansHandler)
 			mealPlans.GET("/:id", handlers.GetPlanRecipesHandler)
+			mealPlans.POST("/generate", handlers.PostMealPlanHandler)
 		}
 		admin := closeGroup.Group("/admin", handlers.AdminMiddleware())
 		{

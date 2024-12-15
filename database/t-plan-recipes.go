@@ -50,8 +50,8 @@ func (prt *PlanRecipesTable) GetPlanRecipes(planId int) ([]*models.PlanRecipes, 
 
 func (prt *PlanRecipesTable) AddPlanRecipes(pr *models.PlanRecipes) (int, error) {
 	var id int
-	query := `INSERT INTO plan_recipes (plan_id, recipe_id) VALUES ($1, $2)`
-	err := prt.db.QueryRow(query, pr.PlanId, pr.RecipeId).Scan(&id)
+	query := `INSERT INTO plan_recipes (plan_id, recipe_id, meal_time) VALUES ($1, $2, $3) RETURNING id`
+	err := prt.db.QueryRow(query, pr.PlanId, pr.RecipeId, pr.MealTime).Scan(&id)
 	if err != nil {
 		return -1, fmt.Errorf("error adding plan recipes: %v", err)
 	}

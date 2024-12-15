@@ -28,13 +28,14 @@ func newMealPlansTable(db *sql.DB) (*MealPlansTable, error) {
 	return &MealPlansTable{db}, nil
 }
 
-func (mpt *MealPlansTable) AddMealPlan(mp *models.MealPlan) error {
-	query := `INSERT INTO meal_plans (user_id, name, description) VALUES ($1, $2, $3);`
-	_, err := mpt.db.Exec(query, mp.UserId, mp.Name, mp.Description)
+func (mpt *MealPlansTable) AddMealPlan(mp *models.MealPlan) (int, error) {
+	query := `INSERT INTO meal_plans (user_id, name, description) VALUES ($1, $2, $3) RETURNING id;`
+	var id int
+	err := mpt.db.QueryRow(query, mp.UserId, mp.Name, mp.Description).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("error adding meal plan: %v", err)
+		return 0, fmt.Errorf("error adding meal plan: %v", err)
 	}
-	return nil
+	return id, nil
 }
 
 func (mpt *MealPlansTable) GetUserMealPlans(userId, limit int) ([]*models.MealPlan, error) {
