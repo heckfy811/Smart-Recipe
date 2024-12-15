@@ -78,3 +78,10 @@ type RecipeImage struct {
 	RecipeId  int    `json:"recipe_id"`
 	ImagePath string `json:"image"`
 }
+
+type PlanRecipes struct {
+	Id       int    `json:"id"`
+	PlanId   int    `json:"plan_id"`
+	RecipeId int    `json:"recipe_id"`
+	MealTime string `json:"meal_time"`
+}
