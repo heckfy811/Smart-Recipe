@@ -3,9 +3,7 @@ package database
 import (
 	"SmartRecipe/models"
 	"database/sql"
-	"errors"
 	"fmt"
-	"github.com/lib/pq"
 	"log"
 )
 
@@ -36,19 +34,12 @@ func (ut *UsersTable) AddUser(u *models.User) (int, error) {
 	query := `INSERT INTO users (name, surname, email, password, role_id) VALUES ($1, $2, $3, $4, $5) RETURNING id;`
 	err := ut.db.QueryRow(query, u.Name, u.Surname, u.Email, u.Password, u.RoleId).Scan(&id)
 	if err != nil {
-		var pqErr *pq.Error
-		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
-			return 0, fmt.Errorf("email already exists")
-		}
-		return 0, fmt.Errorf("error adding user: %v", err)
+		return -1, err
 	}
 	return id, nil
 }
 
 func (ut *UsersTable) GetUserById(id int) (*models.User, error) {
-	if id == 0 {
-		return nil, fmt.Errorf("error getting user by id, user id is empty")
-	}
 	query := `
     SELECT name, surname, email, password, role_id 
     FROM users 
@@ -57,11 +48,7 @@ func (ut *UsersTable) GetUserById(id int) (*models.User, error) {
 	var name, surname, email, password string
 	var roleId int
 	if err := row.Scan(&name, &surname, &email, &password, &roleId); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Printf("No user found with id %d", id)
-			return nil, fmt.Errorf("no user found with id %d", id)
-		}
-		return nil, fmt.Errorf("error getting user by id: %v", err)
+		return nil, err
 	}
 
 	u := &models.User{
@@ -88,11 +75,7 @@ func (ut *UsersTable) GetUserByEmail(email string) (*models.User, error) {
 	var id, roleId int
 	var name, surname, password string
 	if err := row.Scan(&id, &name, &surname, &password, &roleId); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Printf("No user found with email %s", email)
-			return nil, fmt.Errorf("no user found with email %s", email)
-		}
-		return nil, fmt.Errorf("error getting user by email: %v", err)
+		return nil, err
 	}
 
 	u := &models.User{
@@ -111,7 +94,7 @@ func (ut *UsersTable) EditUser(u *models.User) error {
 	query := `UPDATE users SET name=$1, surname=$2, email=$3, password=$4, role_id=$5 WHERE id=$6`
 	_, err := ut.db.Exec(query, u.Name, u.Surname, u.Email, u.Password, u.RoleId, u.Id)
 	if err != nil {
-		return fmt.Errorf("error editing user: %v", err)
+		return err
 	}
 	return nil
 }
@@ -120,7 +103,7 @@ func (ut *UsersTable) DeleteUser(id int) error {
 	query := `DELETE FROM users WHERE id=$1`
 	_, err := ut.db.Exec(query, id)
 	if err != nil {
-		return fmt.Errorf("error deleting user: %v", err)
+		return err
 	}
 	return nil
 }

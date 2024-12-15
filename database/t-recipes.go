@@ -153,9 +153,6 @@ func (rt *RecipesTable) GetRecipesByTitle(limit int, filter, search string) ([]*
 }
 
 func (rt *RecipesTable) GetRecipeById(id int) (*models.Recipe, error) {
-	if id == 0 {
-		return nil, fmt.Errorf("error getting recipe by id, recipe id is empty")
-	}
 	query := `
     SELECT title, description, instructions, kilocalories, proteins, fats, carbohydrates, score 
     FROM recipes 
@@ -164,11 +161,7 @@ func (rt *RecipesTable) GetRecipeById(id int) (*models.Recipe, error) {
 	var title, description, instructions string
 	var kilocalories, proteins, fats, carbohydrates, score float64
 	if err := row.Scan(&title, &description, &instructions, &kilocalories, &proteins, &fats, &carbohydrates, &score); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Printf("No recipe found with id %d", id)
-			return nil, fmt.Errorf("no recipe found with id %d", id)
-		}
-		return nil, fmt.Errorf("error getting recipe by id: %v", err)
+		return nil, err
 	}
 	imagesQuery := `SELECT id, recipe_id, image_path FROM recipe_images WHERE recipe_id = $1`
 	images, err := rt.db.Query(imagesQuery, id)

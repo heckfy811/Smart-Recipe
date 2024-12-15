@@ -3,8 +3,10 @@ package handlers
 import (
 	"SmartRecipe/database"
 	"SmartRecipe/models"
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
@@ -53,7 +55,8 @@ func SignUp(c *gin.Context) {
 	}
 	newUserId, err := database.Database.Users.AddUser(user)
 	if err != nil {
-		if err.Error() == "User already exists" {
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
 			c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
 			return
 		}
@@ -137,7 +140,7 @@ func Login(c *gin.Context) {
 	refreshTokenExpirationTime := time.Now().Add(24 * time.Hour)
 
 	accessClaims := &Claims{
-		UserID: strconv.Itoa(int(user.Id)),
+		UserID: strconv.Itoa(user.Id),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: accessTokenExpirationTime.Unix(),
 		},

@@ -30,7 +30,7 @@ func newPersonalRecipesTable(db *sql.DB) (*PersonalRecipesTable, error) {
 	return &PersonalRecipesTable{db}, nil
 }
 
-func (prt *PersonalRecipesTable) GetPersonalRecipesByUserId(userId int, limit int) ([]models.PersonalRecipe, error) {
+func (prt *PersonalRecipesTable) GetPersonalRecipesByUserId(userId int, limit int) ([]*models.PersonalRecipe, error) {
 	query := `
         SELECT id, user_id, recipe_id, score, is_favorite, is_tried 
         FROM personal_recipes 
@@ -42,13 +42,13 @@ func (prt *PersonalRecipesTable) GetPersonalRecipesByUserId(userId int, limit in
 	}
 	defer rows.Close()
 
-	var recipes []models.PersonalRecipe
+	var recipes []*models.PersonalRecipe
 	for rows.Next() {
 		var pr models.PersonalRecipe
 		if err := rows.Scan(&pr.Id, &pr.UserId, &pr.RecipeId, &pr.Score, &pr.IsFavorite, &pr.IsTried); err != nil {
 			return nil, fmt.Errorf("error scanning user personal recipe: %v", err)
 		}
-		recipes = append(recipes, pr)
+		recipes = append(recipes, &pr)
 	}
 
 	if err = rows.Err(); err != nil {
