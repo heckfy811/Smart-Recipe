@@ -3,7 +3,9 @@ package handlers
 import (
 	"SmartRecipe/database"
 	"SmartRecipe/models"
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -20,7 +22,7 @@ func GetIndexHandler(c *gin.Context) {
 }
 
 func GetAuthPageHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "nasik auth pageee"})
+	c.HTML(http.StatusOK, "auth.html", gin.H{"message": "success"})
 }
 
 func GetMainPageHandler(c *gin.Context) {
@@ -29,14 +31,14 @@ func GetMainPageHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
+	c.HTML(http.StatusOK, "index.html", gin.H{
 		"message":        "success",
 		"recently_added": recipes,
 	})
 }
 
 func GetRecipesHandler(c *gin.Context) {
-	limit, err := strconv.Atoi(c.Query("limit"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "1"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -83,11 +85,15 @@ func GetRecipePageHandler(c *gin.Context) {
 	userId, err := strconv.Atoi(userIdStr.(string))
 	recipeId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 	recipe, err := database.Database.Recipes.GetRecipeById(recipeId)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "recipe not found"})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -230,6 +236,10 @@ func GetNearestShopHandler(c *gin.Context) {
 
 	recipeId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "recipe not found"})
+			return
+		}
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -350,7 +360,7 @@ func GetCheapestShopHandler(c *gin.Context) {
 }
 
 func GetAboutUsHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "about us"})
+	c.HTML(http.StatusOK, "about.html", gin.H{"message": "about us"})
 }
 
 func GetUserProfileHandler(c *gin.Context) {
@@ -371,7 +381,7 @@ func GetUserProfileHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user info"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
+	c.HTML(http.StatusOK, "profile.html", gin.H{
 		"message": "success",
 		"user":    user,
 	})
@@ -388,10 +398,7 @@ func GetTriedRecipesHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
 		return
 	}
-	q, exists := c.GetQuery("limit")
-	if !exists {
-		q = "1"
-	}
+	q := c.DefaultQuery("limit", "1")
 	limit, err := strconv.Atoi(q)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -420,18 +427,14 @@ func GetFavoriteRecipesHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
 		return
 	}
-	q, exists := c.GetQuery("limit")
-	if !exists {
-		q = "1"
-	}
+	q := c.DefaultQuery("limit", "1")
 	limit, err := strconv.Atoi(q)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	if limit < 1 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit must be greater than 0"})
-		return
+		limit = 1
 	}
 	favoriteRecipes, err := database.Database.PersonalRecipes.GetFavoriteRecipes(userId, limit*10)
 	if err != nil {
@@ -455,18 +458,14 @@ func GetRatedRecipesHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
 		return
 	}
-	q, exists := c.GetQuery("limit")
-	if !exists {
-		q = "1"
-	}
+	q := c.DefaultQuery("limit", "1")
 	limit, err := strconv.Atoi(q)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	if limit < 1 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit must be greater than 0"})
-		return
+		limit = 1
 	}
 	ratedRecipes, err := database.Database.PersonalRecipes.GetRatedRecipes(userId, limit*10)
 	if err != nil {
@@ -476,5 +475,88 @@ func GetRatedRecipesHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message":       "success",
 		"rated_recipes": ratedRecipes,
+	})
+}
+
+func GetMealPlansHandler(c *gin.Context) {
+	userIdStr, exists := c.Get("userId")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+	userId, err := strconv.Atoi(userIdStr.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
+		return
+	}
+	q := c.DefaultQuery("limit", "1")
+	limit, err := strconv.Atoi(q)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if limit < 1 {
+		limit = 1
+	}
+	mealPlans, err := database.Database.MealPlans.GetUserMealPlans(userId, limit*10)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"message":    "success",
+		"meal_plans": mealPlans,
+	})
+}
+
+func GetPlanRecipesHandler(c *gin.Context) {
+	var response struct {
+		Breakfast struct {
+			Recipes []*models.Recipe `json:"recipes"`
+		} `json:"breakfast"`
+		Lunch struct {
+			Recipes []*models.Recipe `json:"recipes"`
+		} `json:"lunch"`
+		Dinner struct {
+			Recipes []*models.Recipe `json:"recipes"`
+		} `json:"dinner"`
+	}
+	planId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid plan ID"})
+		return
+	}
+	planRecipes, err := database.Database.PlanRecipes.GetPlanRecipes(planId)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "meal plan not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	for _, pr := range planRecipes {
+		recipe, err := database.Database.Recipes.GetRecipeById(pr.RecipeId)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		switch pr.MealTime {
+		case "breakfast":
+			response.Breakfast.Recipes = append(response.Breakfast.Recipes, recipe)
+		case "lunch":
+			response.Lunch.Recipes = append(response.Lunch.Recipes, recipe)
+		case "dinner":
+			response.Dinner.Recipes = append(response.Dinner.Recipes, recipe)
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "unknown meal time"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":   "success",
+		"meal_plan": response,
 	})
 }

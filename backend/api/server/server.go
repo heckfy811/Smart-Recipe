@@ -12,18 +12,23 @@ type APIServer struct {
 
 func (s *APIServer) Run() error {
 	app := gin.Default()
-
+	app.LoadHTMLGlob("front/*.html")
 	app.GET("/", handlers.GetIndexHandler)
+
 	openGroup := app.Group("/o")
 	{
 		openGroup.POST("/signup", handlers.SignUp)
 		openGroup.POST("/login", handlers.Login)
 		openGroup.GET("/refresh", handlers.RefreshToken)
 		openGroup.GET("/auth", handlers.GetAuthPageHandler) // Авторизация
+
 	}
 	closeGroup := app.Group("/c", handlers.AuthMiddleware())
 	{
 		closeGroup.GET("/smart_recipe", handlers.GetMainPageHandler)
+		closeGroup.Static("/images", "./front/images")
+		closeGroup.Static("/js", "./front/js")
+		closeGroup.Static("/css", "./front/css")
 		recipes := closeGroup.Group("/recipes")
 		{
 			recipes.GET("/list", handlers.GetRecipesHandler)
@@ -35,11 +40,16 @@ func (s *APIServer) Run() error {
 		closeGroup.GET("/about", handlers.GetAboutUsHandler)
 		user := closeGroup.Group("/user")
 		{
-			user.GET("/", handlers.GetUserProfileHandler)
+			user.GET("", handlers.GetUserProfileHandler)
 			user.GET("/tried_recipes", handlers.GetTriedRecipesHandler)
 			user.GET("/favorite_recipes", handlers.GetFavoriteRecipesHandler)
 			user.GET("/rated_recipes", handlers.GetRatedRecipesHandler)
 			user.POST("/logout", handlers.Logout)
+		}
+		mealPlans := closeGroup.Group("/meal_plans")
+		{
+			mealPlans.GET("", handlers.GetMealPlansHandler)
+			mealPlans.GET("/:id", handlers.GetPlanRecipesHandler)
 		}
 		admin := closeGroup.Group("/admin", handlers.AdminMiddleware())
 		{
