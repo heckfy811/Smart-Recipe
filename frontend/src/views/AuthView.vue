@@ -1,5 +1,14 @@
 <template>
-    <div>
-      <h1>Welcome to Auth Page</h1>
-    </div>
-  </template>  
+  <AuthComponent />
+</template>
+
+<script>
+import AuthComponent from "@/components/AuthComponent.vue";
+
+export default {
+  name: "AuthView",
+  components: {
+    AuthComponent,
+  },
+};
+</script>

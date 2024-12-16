@@ -34,16 +34,20 @@ body {
 
 .nav-links {
   display: flex;
+  align-items: center; /* Вертикальное выравнивание */
   list-style: none;
   padding-right: 120px;
 }
 
 .nav-links li {
   margin-left: 20px;
+  display: flex;
+  align-items: center; /* Центрирование содержимого */
 }
 
 .nav-links a {
   text-decoration: none;
+  padding: 8px 15px; /* Добавляем padding для выравнивания */
 }
 
 a {
@@ -185,11 +189,11 @@ span{
   display: flex;
   gap: 5px;
 }
-/* Подписка */
+
 .subscription {
   margin-top: 150px;
   height: 454px;
-  background-image: url('../images/background.png');
+  background-image: url(../src/assets/images/background.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -201,7 +205,7 @@ span{
 }
 
 .subscription-text {
-  background-color: #33333370;
+  background-color: #00000070;
   border-radius: 25px;
   padding: 50px;
 }
@@ -330,4 +334,3 @@ footer p {
   margin-top: 20px;
   margin-bottom: 30px;
 }
-
