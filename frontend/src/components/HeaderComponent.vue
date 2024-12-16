@@ -1,99 +1,154 @@
 <template>
   <header>
     <nav class="navbar">
+      <!-- Логотип -->
       <router-link to="/" class="logo">
         <div class="smart">Smart</div>.Recipe
       </router-link>
-      <!-- Меню для широких экранов -->
-      <ul class="nav-links" v-if="!isMobile">
-        <li><router-link to="/" class="head" :class="{ click: currentRoute === '/' }">Главная</router-link></li>
-        <li><router-link to="/recipes" class="head" :class="{ click: currentRoute === '/recipes' }">Рецепты</router-link></li>
-        <li><router-link to="/plans" class="head" :class="{ click: currentRoute === '/plans' }">Планы питания</router-link></li>
-        <li><router-link to="/about" class="head" :class="{ click: currentRoute === '/about' }">О нас</router-link></li>
-        <li><router-link to="/profile" class="profile-btn" :class="{ click: currentRoute === '/profile' }">Профиль</router-link></li>
+
+      <!-- Навбар -->
+      <ul class="nav-links" v-if="!isCollapsed">
+        <li>
+          <router-link to="/" class="head" :class="{ click: currentRoute === '/' }">Главная</router-link>
+        </li>
+        <li>
+          <router-link to="/recipes" class="head" :class="{ click: currentRoute === '/recipes' }">Рецепты</router-link>
+        </li>
+        <li>
+          <router-link to="/plans" class="head" :class="{ click: currentRoute === '/plans' }">Планы питания</router-link>
+        </li>
+        <li>
+          <router-link to="/about" class="head" :class="{ click: currentRoute === '/about' }">О нас</router-link>
+        </li>
+        <li>
+          <router-link to="/profile" class="profile-btn" :class="{ click: currentRoute === '/profile' }">Профиль</router-link>
+        </li>
       </ul>
-      <!-- Выпадающее меню для мобильных устройств -->
-      <div class="dropdown" v-if="isMobile">
+
+      <!-- Выпадающий список -->
+      <div 
+        class="dropdown" 
+        v-else
+        @mouseenter="openDropdown" 
+        @mouseleave="closeDropdown"
+      >
         <button class="dropdown-button">
           {{ currentPageName }}
         </button>
-        <ul class="dropdown-menu">
-          <li><router-link to="/" @click="closeDropdown">Главная</router-link></li>
-          <li><router-link to="/recipes" @click="closeDropdown">Рецепты</router-link></li>
-          <li><router-link to="/plans" @click="closeDropdown">Планы питания</router-link></li>
-          <li><router-link to="/about" @click="closeDropdown">О нас</router-link></li>
-          <li><router-link to="/profile" @click="closeDropdown">Профиль</router-link></li>
+        <ul class="dropdown-menu" v-show="isDropdownVisible">
+          <li v-for="(link, index) in navLinks" :key="index" :style="dropdownItemStyle(index)">
+            <router-link :to="link.path" @click="closeDropdown">{{ link.name }}</router-link>
+          </li>
         </ul>
       </div>
     </nav>
   </header>
 </template>
 
+
+
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 
 export default {
   name: "HeaderComponent",
   setup() {
     const route = useRoute();
-    const isMobile = ref(false);
+    const isCollapsed = ref(false);
+    const isDropdownVisible = ref(false);
 
-    // Определяем текущий маршрут
+    const navLinks = [
+      { name: "Главная", path: "/" },
+      { name: "Рецепты", path: "/recipes" },
+      { name: "Планы питания", path: "/plans" },
+      { name: "О нас", path: "/about" },
+      { name: "Профиль", path: "/profile" },
+    ];
+
     const currentRoute = computed(() => route.path);
 
-    // Название текущей страницы
     const currentPageName = computed(() => {
-      switch (route.path) {
-        case "/":
-          return "Главная";
-        case "/recipes":
-          return "Рецепты";
-        case "/plans":
-          return "Планы питания";
-        case "/about":
-          return "О нас";
-        case "/profile":
-          return "Профиль";
-        default:
-          return "Меню";
-      }
+      const currentLink = navLinks.find((link) => link.path === route.path);
+      return currentLink ? currentLink.name : "Меню";
     });
 
-    // Обновляем состояние мобильного вида при изменении ширины экрана
-    const updateViewMode = () => {
-      isMobile.value = window.innerWidth <= 768;
+    const openDropdown = () => {
+      isDropdownVisible.value = true;
     };
 
-    window.addEventListener("resize", updateViewMode);
-    updateViewMode(); // Инициализация
+    const closeDropdown = () => {
+      isDropdownVisible.value = false;
+    };
+
+    const updateNavbarState = () => {
+      const navbar = document.querySelector(".navbar");
+      const navLinksEl = document.querySelector(".nav-links");
+
+      
+      if (navbar && navLinksEl) {
+        // Добавим проверку на случай, если ширину не удается определить
+        const navLinksWidth = navLinksEl.offsetWidth || 0;
+        isCollapsed.value = navbar.offsetWidth < navLinksWidth + 150;
+      } else {
+        // Если не можем получить элемент, предположим что надо свернуть
+        isCollapsed.value = true;
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", updateNavbarState);
+      updateNavbarState();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("resize", updateNavbarState);
+    });
+
+    const dropdownItemStyle = (index) => {
+      const delay = index * 0.1;
+      return {
+        animation: isDropdownVisible.value
+          ? `fadeIn 0.3s ease ${delay}s forwards`
+          : `fadeOut 0.3s ease ${delay}s forwards`,
+      };
+    };
 
     return {
       currentRoute,
       currentPageName,
-      isMobile,
+      isCollapsed,
+      isDropdownVisible,
+      navLinks,
+      openDropdown,
+      closeDropdown,
+      dropdownItemStyle,
     };
   },
 };
 </script>
 
-<style scoped>
-/* Основной стиль навбара */
+
+<style>
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
   background-color: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Логотип */
 .logo {
   font-size: 1.5em;
   font-weight: 600;
   text-decoration: none;
   color: #000000;
+  transition: transform 0.3s ease;
   display: flex;
-  justify-content: center;
+  align-items: center;
 }
 
 .smart {
@@ -115,39 +170,56 @@ export default {
 .nav-links a {
   text-decoration: none;
   padding: 8px 15px;
+  color: #000; /* Основной цвет текста */
+  transition: color 0.3s ease;
 }
 
-.profile-btn {
-  padding: 8px 15px;
-  text-decoration: none;
+.nav-links .click {
+  color: #12a370; /* Зелёный цвет для активной страницы */
+}
+
+.nav-links a:hover {
+  color: #12a370; /* Зелёный цвет при наведении */
+}
+
+.nav-links .profile-btn {
+  color: #12a370 !important; /* Постоянный зелёный цвет */
   border: 1px solid #12a370;
   border-radius: 20px;
-  color: #12a370;
+  padding: 8px 15px;
+  text-decoration: none;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-/* Выпадающее меню */
+/* Подсветка кнопки Профиль при наведении */
+.nav-links .profile-btn:hover {
+  color: white !important; /* Текст становится белым */
+  background-color: #12a370; /* Фон становится зелёным */
+}
+
+/* Выпадающий список */
 .dropdown {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 10px;
+  width: 90%;
+  text-align: center;
 }
 
 .dropdown-button {
   background-color: #12a370;
   color: white;
-  padding: 8px 15px;
+  padding: 12px 15px;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
+  width: 100%;
 }
 
 .dropdown-menu {
-  display: none;
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  width: 100%;
   background-color: white;
   list-style: none;
   padding: 10px 0;
@@ -155,51 +227,75 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(10px);
-}
-
-.dropdown-menu li {
-  padding: 10px 20px;
-  text-align: center;
-}
-
+/* Убираем нижнее подчеркивание у текста в выпадающем списке */
 .dropdown-menu a {
-  text-decoration: none;
-  color: #000;
+  text-decoration: none; /* Убираем подчеркивание */
+  color: #000; /* Основной цвет текста */
+  transition: color 0.3s ease; /* Плавный переход цвета */
 }
 
+/* Подсветка текста зелёным при наведении */
 .dropdown-menu a:hover {
-  color: #12a370;
+  color: #12a370; /* Зелёный цвет при наведении */
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 /* Мобильная версия */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
-    justify-content: center;
     align-items: center;
   }
 
   .logo {
-    margin-bottom: 10px;
+    margin: 0 auto;
+    transform: scale(1.5);
+    text-align: center;
+    display: block; /* Делает элемент блочным, чтобы margin: 0 auto работал корректно */
   }
 
   .nav-links {
-    display: none;
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
   }
 
+  /* Сделаем dropdown также на всю ширину и центрируем */
   .dropdown {
-    width: 100%;
+    width: 90%;
+    margin-top: 10px;
     text-align: center;
   }
+
+  .dropdown-button {
+    width: 90%;
+  }
 }
+
 </style>

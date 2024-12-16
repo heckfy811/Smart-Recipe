@@ -13,36 +13,32 @@ import ProfileView from '@/views/ProfileView.vue';
 import RecipeView from '@/views/RecipeView.vue';
 import RecipesView from '@/views/RecipesView.vue';
 import RegisterComponent from '../components/RegisterComponent.vue';
+import RegisterView from '../views/RegisterView.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: MainView,
-    meta: { requiresAuth: true }, // Главная требует авторизации
+    //meta: { requiresAuth: true }, // Главная требует авторизации
   },
   {
     path: '/about',
     name: 'About',
     component: AboutView,
-    meta: { requiresAuth: true },
+    //meta: { requiresAuth: true },
   },
   {
     path: "/auth",
     name: "Auth",
-    component: () => import("../views/AuthView.vue"),
-    meta: { isAuthPage: "auth" }, // Указываем, что это страница авторизации
+    component: AuthView,
+    //meta: { isAuthPage: "auth" }, // Указываем, что это страница авторизации
   },
   {
     path: "/register",
     name: "Register",
-    component: () => import("../views/RegisterView.vue"),
-    meta: { isAuthPage: "register" }, // Указываем, что это страница регистрации
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: MainView, // Отображаем главную страницу, если маршрут не найден
+    component: RegisterView,
+    //meta: { isAuthPage: "register" }, // Указываем, что это страница регистрации
   },
   {
     path: '/favorite',

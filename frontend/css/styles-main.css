@@ -185,10 +185,6 @@ span{
   font-size: 30px;
 }
 
-.stars{
-  display: flex;
-  gap: 5px;
-}
 
 .subscription {
   margin-top: 150px;
