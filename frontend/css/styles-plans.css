@@ -114,7 +114,7 @@ a {
 .subscription {
   margin-top: 150px;
   height: 454px;
-  background-image: url(front/images/background.png);
+  background-image: url(frontend/src/assets/images/background.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -131,6 +131,64 @@ a {
   padding: 50px;
 }
 
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px; /* Увеличиваем расстояние между блоками */
+  
+  /* Центрирование контейнера */
+  position: relative;
+  margin: 50px auto; /* Автоцентрирование по горизонтали */
+  width: 80%; /* Увеличенная ширина */
+  max-width: 1000px; /* Максимальная ширина */
+  height: 700px; /* Увеличенная высота */
+}
+
+.block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden; /* Скрываем контуры эмблемы */
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+.icon {
+    transition: opacity 0.3s, transform 0.3s;
+    position: absolute; /* Эмблема будет абсолютной */
+    z-index: 0; /* Эмблема будет ниже текста */
+    top: 50%; /* Центрируем по вертикали */
+    left: 50%; /* Центрируем по горизонтали */
+    transform: translate(-50%, -50%); /* Сдвигаем на половину ширины и высоты */
+}
+
+.card {
+    position: relative; /* Текст будет относительным */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+    border-radius: 10px;
+    padding: 140px;
+    text-align: center;
+    color: #333;
+    z-index: 1; /* Текст выше эмблемы */
+}
+.block:hover .icon {
+    transform: translate(-50%, -50%) scale(3); /* Эмблема увеличивается и остается по центру */
+}
+.block:hover .card {
+    opacity: 1;
+    transform: scale(1);
+}
 
 /* Добавить рацион */
 .add-plan {

@@ -1,5 +1,17 @@
 <template>
     <div>
-      <h1>Welcome to Plan Page</h1>
+      <PlanComponent/>
     </div>
-  </template>  
+</template>  
+
+<script>
+
+import PlanComponent from '../components/PlanComponent.vue';
+
+export default{
+  components:{
+    PlanComponent,
+  },
+};
+
+</script>

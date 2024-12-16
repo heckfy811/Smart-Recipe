@@ -1,5 +1,40 @@
 <template>
     <div>
-      <h1>Welcome to Fav Page</h1>
+      <FavoriteComponent @toggle-sidebar="toggleSidebar"/>
+      <SidebarComponent :is-visible="isSidebarVisible" @close-sidebar="closeSidebar" />
     </div>
-  </template>  
+</template>
+
+<script>
+
+import FavoriteComponent from '../components/FavoriteComponent.vue';
+import SidebarComponent from '../components/SidebarComponent.vue';
+
+export default{
+  components:{
+    FavoriteComponent,
+    SidebarComponent,
+  },
+  data() {
+    return {
+      isSidebarVisible: false, // Состояние видимости боковой панели
+    };
+  },
+  methods: {
+    toggleSidebar() {
+      this.isSidebarVisible = !this.isSidebarVisible;
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('active');
+      const sidebar = document.getElementById('filter-sidebar');
+      sidebar.classList.add('active');
+    },
+    closeSidebar() {
+      this.isSidebarVisible = false;
+      const overlay = document.getElementById('overlay');
+      overlay.classList.remove('active');
+
+    },
+  },
+};
+
+</script>

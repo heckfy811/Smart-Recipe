@@ -1,5 +1,17 @@
 <template>
     <div>
-      <h1>Welcome to Cheap Page</h1>
+      <CheapComponent/>
     </div>
-  </template>  
+</template>  
+
+<script>
+
+import CheapComponent from '../components/CheapComponent.vue';
+
+export default{
+  components:{
+    CheapComponent,
+  },
+};
+
+</script>

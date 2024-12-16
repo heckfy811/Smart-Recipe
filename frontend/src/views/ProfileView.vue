@@ -1,5 +1,16 @@
 <template>
     <div>
-      <h1>Welcome to Profile Page</h1>
+      <ProfileComponent/>
     </div>
-  </template>  
+</template>
+
+<script>
+
+import ProfileComponent from '../components/ProfileComponent.vue';
+
+export default{
+  components:{
+    ProfileComponent,
+  },
+};
+</script>
