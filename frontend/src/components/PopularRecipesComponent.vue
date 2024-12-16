@@ -16,7 +16,7 @@
             <h5>{{ recipe.rating }}</h5>
             <span>★★★★☆</span>
           </div>
-          <router-link :to="'/recipe/' + recipe.id" class="btn-small">Посмотреть</router-link>
+          <router-link :to="'/recipe' + recipe.id" class="btn-small">Посмотреть</router-link>
         </div>
       </div>
     </section>

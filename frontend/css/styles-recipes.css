@@ -339,18 +339,17 @@ footer p {
 .filter-sidebar {
   position: fixed;
   top: 0;
-  right: -350px; /* Скрыто по умолчанию */
-  width: 350px;
+  right: 0; /* Скрыто по умолчанию */
+  width: 20%;
   height: 100%;
   background-color: #fff;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-  transition: right 0.3s ease;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.7s ease;
+  z-index: 100;
+
 }
 
-.filter-sidebar.open {
+.filter-sidebar.active {
   right: 0;
 }
 
@@ -369,6 +368,7 @@ footer p {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color:#000000;
 }
 
 .filter-content {
@@ -446,8 +446,8 @@ ul li {
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease;
-  z-index: 999;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 99;
 }
 
 .overlay.active {
