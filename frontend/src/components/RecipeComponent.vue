@@ -62,16 +62,148 @@
                 <p>Время готовки 180 минут</p>
                 <p>Ориентировочная стоимость блюда составляет: 2431</p>
                 <router-link to="/near" class="btn-small">Рассчитать полную корзину</router-link>
-                <span>4.5 ★★★★☆</span>
-                <a href="#" class="feedback">Оставить отзыв</a>
+                <div class="stars">
+                  <h5>4.5</h5>
+                  <span>★★★★☆</span>
+                </div>
+                
+                <button class="feedback" @click="openModal">Оставить отзыв</button>
             </div>
         </div>
     </section>
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Оставить отзыв</h2>
+        <div class="sstars">
+          <h
+              v-for="n in 5"
+              :key="n"
+              @click="rate(n)"
+              :class="{ 'filled': n <= rating }"
+              class="sstar"
+            >&#9733;
+          </h>
+        </div>
+        <textarea v-model="reviewText" placeholder="Напишите ваш отзыв..."></textarea>
+        <div class="modal-actions">
+          <button @click="submitReview">Отправить</button>
+          <button @click="closeModal">Отмена</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "RecipeComponent.vue",
+  data() {
+    return {
+      showModal: false, // Управляет показом модального окна
+      rating: 0, // Количество выбранных звёзд
+      reviewText: "", // Текст отзыва
+    };
+  },
+  methods: {
+    openModal() {
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+      this.resetReview();
+    },
+    rate(n) {
+      this.rating = n; // Устанавливает рейтинг при клике на звезду
+    },
+    submitReview() {
+      if (this.rating === 0) {
+        alert("Пожалуйста, выберите количество звёзд.");
+        return;
+      }
+      alert(`Ваш отзыв: ${this.reviewText}\nРейтинг: ${this.rating} ★`);
+      this.closeModal();
+    },
+    resetReview() {
+      this.rating = 0;
+      this.reviewText = "";
+    },
+  },
 };
 </script>
+
+
+<style scoped>
+  .feedback {
+    color: #12A370;
+    cursor: pointer;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+  }
+
+  .sstars {
+  font-size: 2em;
+  color: lightgray; /* Цвет невыбранных звёзд */
+  cursor: pointer;
+}
+
+.sstar {
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.sstar.filled {
+  color: gold; /* Цвет выбранных звёзд */
+}
+
+  textarea {
+    width: 100%;
+    margin-top: 15px;
+    height: 80px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+  }
+
+  .modal-actions button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .modal-actions button:first-child {
+    background-color: #12A370;
+    color: white;
+  }
+
+  .modal-actions button:last-child {
+    background-color: #f44336;
+    color: white;
+  }
+</style>

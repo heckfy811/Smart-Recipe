@@ -24,7 +24,7 @@
         </ul>
 
         <h3 class="total-cost"><strong>Общая стоимость:</strong> 1500 руб</h3>
-        <router-link to="/near" class="highlight-link">Посмотреть самый выгодный магазин</router-link>
+        <router-link to="/near" class="highlight-link">Посмотреть ближайший магазин</router-link>
     </section>
   </div>
 </template>
@@ -34,3 +34,58 @@ export default {
   name: "Cheap.vue",
 };
 </script>
+
+<style scoped>
+.price h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.ingredients {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #ccc;
+}
+
+.ingredients li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+
+}
+
+.ingredients p {
+  margin: 0;
+  color: #666666c4;
+  font-weight: 500;
+}
+
+.ingredients span {
+  color: #666666c4;
+  font-weight: bold;
+  font-size: medium;
+}
+
+/* Итоговая стоимость */
+.total-cost {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.highlight-link {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #12A370;
+  font-weight: bold;
+}
+
+.highlight-link:hover {
+  text-decoration: underline;
+  color: #0c6445;
+}
+</style>

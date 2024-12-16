@@ -72,6 +72,7 @@
           <router-link :to="'/history' + recipe.id" class="btn-small">Посмотреть</router-link>
         </div>
       </div>
+      <h2>Мои планы питания</h2>
     </section>
   </div>
 </template>
