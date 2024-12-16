@@ -1,5 +1,16 @@
 <template>
     <div>
-      <h1>Welcome to Recipe Page</h1>
+      <RecipeComponent/>
     </div>
-  </template>  
+</template>  
+
+<script>
+
+import RecipeComponent from '../components/RecipeComponent.vue';
+
+export default{
+  components:{
+    RecipeComponent,
+  },
+};
+</script>

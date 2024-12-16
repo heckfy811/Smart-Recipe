@@ -101,6 +101,7 @@ p {
   color: #12103DCC;
 }
 
+
 li {
   color: #12103DCC;
   margin-left: 30px;
@@ -146,6 +147,7 @@ li {
 .recipe-info h3 {
   font-size: 2em;
   color: #333333;
+  margin: 0;
 }
 
 .recipe-info p {

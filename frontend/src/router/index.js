@@ -12,81 +12,92 @@ import PlansView from '@/views/PlansView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import RecipeView from '@/views/RecipeView.vue';
 import RecipesView from '@/views/RecipesView.vue';
-import RegisterComponent from '../components/RegisterComponent.vue';
-import RegisterView from '../views/RegisterView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+import CheapView from '../views/CheapView.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: MainView,
-    //meta: { requiresAuth: true }, // Главная требует авторизации
+  //  meta: { requiresAuth: true }, // Главная требует авторизации
   },
   {
     path: '/about',
     name: 'About',
     component: AboutView,
-    //meta: { requiresAuth: true },
+ //   meta: { requiresAuth: true },
   },
   {
     path: "/auth",
     name: "Auth",
     component: AuthView,
-    //meta: { isAuthPage: "auth" }, // Указываем, что это страница авторизации
+   // meta: { isAuthPage: "auth" }, // Указываем, что это страница авторизации
   },
   {
     path: "/register",
     name: "Register",
     component: RegisterView,
-    //meta: { isAuthPage: "register" }, // Указываем, что это страница регистрации
+   // meta: { isAuthPage: "register" }, // Указываем, что это страница регистрации
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: MainView, // Отображаем главную страницу, если маршрут не найден
   },
   {
     path: '/favorite',
     name: 'Favorite',
     component: FavoriteView,
-    meta: { requiresAuth: true },
+   // meta: { requiresAuth: true },
   },
   {
     path: '/history',
     name: 'History',
     component: HistoryView,
-    meta: { requiresAuth: true },
+   // meta: { requiresAuth: true },
   },
   {
     path: '/near',
     name: 'Near',
     component: NearView,
-    meta: { requiresAuth: true },
+   // meta: { requiresAuth: true },
+  },
+  {
+    path: '/cheap',
+    name: 'Cheap',
+    component: CheapView,
+   // meta: { requiresAuth: true },
   },
   {
     path: '/plan',
     name: 'Plan',
     component: PlanView,
-    meta: { requiresAuth: true },
+   // meta: { requiresAuth: true },
   },
   {
     path: '/plans',
     name: 'Plans',
     component: PlansView,
-    meta: { requiresAuth: true },
+  //  meta: { requiresAuth: true },
   },
   {
     path: '/profile',
     name: 'Profile',
     component: ProfileView,
-    meta: { requiresAuth: true },
+  //  meta: { requiresAuth: true },
   },
   {
     path: '/recipe',
     name: 'Recipe',
     component: RecipeView,
-    meta: { requiresAuth: true },
+ //   meta: { requiresAuth: true },
   },
   {
     path: '/recipes',
     name: 'Recipes',
     component: RecipesView,
-    meta: { requiresAuth: true },
+  //  meta: { requiresAuth: true },
   },
   {
     path: '/:pathMatch(.*)*',

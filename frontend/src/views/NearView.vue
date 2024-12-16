@@ -1,5 +1,16 @@
 <template>
     <div>
-      <h1>Welcome to Near Page</h1>
+      <NearComponent/>
     </div>
-  </template>  
+</template>  
+
+<script>
+
+import NearComponent from '../components/NearComponent.vue';
+
+export default{
+  components:{
+    NearComponent,
+  },
+};
+</script>
