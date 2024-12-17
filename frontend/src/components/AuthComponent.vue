@@ -25,23 +25,36 @@
 </template>
 
 <script>
+import usersData from "@/assets/testing-data/testAuth.json";
+
 export default {
   name: "AuthComponent",
   data() {
     return {
       loginData: {
-        identifier: "", // ID, email или номер телефона
+        identifier: "",
         password: "",
       },
+      users: usersData,
     };
   },
   methods: {
     handleLogin() {
-      if (this.loginData.identifier && this.loginData.password) {
-        alert("Авторизация успешна!");
-        this.$router.push("/"); // Перенаправление на главную
+      const user = this.users.find(
+        (u) =>
+          (u.id === this.loginData.identifier ||
+            u.email === this.loginData.identifier ||
+            u.phone === this.loginData.identifier) &&
+          u.password === this.loginData.password
+      );
+
+      if (user) {
+        alert(`Добро пожаловать, ${user.id}!`);
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("user", JSON.stringify(user));
+        this.$router.push("/");
       } else {
-        alert("Введите корректные данные.");
+        alert("Неверный ID, email, номер телефона или пароль.");
       }
     },
   },

@@ -63,12 +63,14 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 50px;
+  padding-right: 0px;
   background-color: #fff;
   position: relative;
 }
 
 .hero-content {
   max-width: 600px;
+  padding-left: 100px;
 }
 
 .hero-content h1 {
@@ -153,11 +155,23 @@ export default {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 35px !important;
   }
 
   .hero-content {
+    padding-left: 0px;
+    padding-right: 0px;
     max-width: 100%;
     margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-content h1,
+  .hero-content p {
+    text-align: center;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .hero-content h1 {

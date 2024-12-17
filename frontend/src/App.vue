@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import HeaderComponent from '@/components/HeaderComponent.vue';
-import FooterComponent from '@/components/FooterComponent.vue';
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import HeaderComponent from "@/components/HeaderComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 
 export default {
   components: {
@@ -19,8 +19,9 @@ export default {
   },
   setup() {
     const route = useRoute();
-
-    const isAuthPage = computed(() => route.meta.isAuthPage === "auth" || route.meta.isAuthPage === "register");
+    const isAuthPage = computed(() => {
+      return route.path === "/auth" || route.path === "/register";
+    });
 
     return { isAuthPage };
   },

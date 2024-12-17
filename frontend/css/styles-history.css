@@ -9,55 +9,6 @@ body {
   font-family: 'Montserrat', sans-serif;
   line-height: 1.6;
 }
-
-/* Навигационная панель */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background-color: white;  
-}
-
-.logo {
-  font-size: 1.5em;
-  font-weight: 600;
-  padding-left: 120px;
-  text-decoration: none;
-  color: #000000;
-}
-
-.smart {
-  color: #12A370;
-  display: inline;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  padding-right: 120px;
-}
-
-.nav-links li {
-  margin-left: 20px;
-}
-
-.nav-links a {
-  text-decoration: none;
-}
-
-a {
-  color: black;
-}
-
-.profile-btn {
-  padding: 8px 15px;
-  text-decoration: none;
-  border: 1px solid #12A370;
-  border-radius: 20px;
-  color: #12A370;
-}
-
 /* Секция "История" */
 .history {
   padding: 50px;

@@ -20,89 +20,82 @@ const routes = [
     path: '/',
     name: 'Home',
     component: MainView,
-  //  meta: { requiresAuth: true }, // Главная требует авторизации
+    meta: { requiresAuth: true },
   },
   {
     path: '/about',
     name: 'About',
     component: AboutView,
- //   meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
-    path: "/auth",
-    name: "Auth",
+    path: '/auth',
+    name: 'Auth',
     component: AuthView,
-   // meta: { isAuthPage: "auth" }, // Указываем, что это страница авторизации
   },
   {
-    path: "/register",
-    name: "Register",
+    path: '/register',
+    name: 'Register',
     component: RegisterView,
-   // meta: { isAuthPage: "register" }, // Указываем, что это страница регистрации
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: MainView, // Отображаем главную страницу, если маршрут не найден
   },
   {
     path: '/favorite',
     name: 'Favorite',
     component: FavoriteView,
-   // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/history',
     name: 'History',
     component: HistoryView,
-   // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/near',
     name: 'Near',
     component: NearView,
-   // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/cheap',
     name: 'Cheap',
     component: CheapView,
-   // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/plan',
     name: 'Plan',
     component: PlanView,
-   // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/plans',
     name: 'Plans',
     component: PlansView,
-  //  meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/profile',
     name: 'Profile',
     component: ProfileView,
-  //  meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/recipe',
     name: 'Recipe',
     component: RecipeView,
- //   meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/recipes',
     name: 'Recipes',
     component: RecipesView,
-  //  meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: MainView, // Для необработанных маршрутов
+    component: MainView,
   },
 ];
 
@@ -111,12 +104,17 @@ const router = createRouter({
   routes,
 });
 
-// Проверка авторизации
+// auth-guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('token'); // Проверьте токен в localStorage
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/auth'); // Перенаправление на страницу авторизации
-  } else {
+    next("/auth");
+  } 
+  else if ((to.path === "/auth" || to.path === "/register") && isAuthenticated) {
+    next("/");
+  } 
+  else {
     next();
   }
 });

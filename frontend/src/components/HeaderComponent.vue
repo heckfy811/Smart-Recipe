@@ -82,19 +82,18 @@ export default {
     };
 
     const updateNavbarState = () => {
-      const navbar = document.querySelector(".navbar");
-      const navLinksEl = document.querySelector(".nav-links");
+  const navbar = document.querySelector(".navbar");
+  const navLinksEl = document.querySelector(".nav-links");
 
-      
-      if (navbar && navLinksEl) {
-        // Добавим проверку на случай, если ширину не удается определить
-        const navLinksWidth = navLinksEl.offsetWidth || 0;
-        isCollapsed.value = navbar.offsetWidth < navLinksWidth + 150;
-      } else {
-        // Если не можем получить элемент, предположим что надо свернуть
-        isCollapsed.value = true;
-      }
-    };
+  if (navbar && navLinksEl) {
+    // Проверяем ширину окна и вычисляем, нужно ли скрывать навбар
+    const navLinksWidth = navLinksEl.offsetWidth || 0;
+    isCollapsed.value = navbar.offsetWidth < navLinksWidth + 150;
+  } else {
+    isCollapsed.value = window.innerWidth <= 768; // Восстанавливаем isCollapsed при изменении ширины
+  }
+};
+
 
     onMounted(() => {
       window.addEventListener("resize", updateNavbarState);
@@ -144,6 +143,7 @@ export default {
 .logo {
   font-size: 1.5em;
   font-weight: 600;
+  padding-left: 120px;
   text-decoration: none;
   color: #000000;
   transition: transform 0.3s ease;
@@ -266,7 +266,7 @@ export default {
   }
 }
 
-/* Мобильная версия */
+/* Мобилка */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -277,7 +277,8 @@ export default {
     margin: 0 auto;
     transform: scale(1.5);
     text-align: center;
-    display: block; /* Делает элемент блочным, чтобы margin: 0 auto работал корректно */
+    display: block;
+    padding-left: 0px !important;
   }
 
   .nav-links {
@@ -286,7 +287,6 @@ export default {
     margin-top: 15px;
   }
 
-  /* Сделаем dropdown также на всю ширину и центрируем */
   .dropdown {
     width: 90%;
     margin-top: 10px;

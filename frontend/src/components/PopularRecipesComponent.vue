@@ -7,8 +7,8 @@
     <div class="recipes-grid">
       <div 
         class="recipe-card" 
-        v-for="(recipe, index) in recipes" 
-        :key="index"
+        v-for="(recipe, index) in sortedRecipes" 
+        :key="recipe.id"
         :style="cardAnimationStyle(index)"
       >
         <img :src="recipe.image" :alt="recipe.title" />
@@ -24,34 +24,18 @@
 </template>
 
 <script>
-import lasagna from "@/assets/images/lasagna.png";
-import beef from "@/assets/images/beef.png";
-import sandwich from "@/assets/images/sandwich.png";
+import popularRecipesData from "@/assets/testing-data/testPopularRecipe.json";
 
 export default {
   data() {
     return {
-      recipes: [
-        {
-          id: 1,
-          title: "Лазанья из свиной шейки",
-          rating: 4.5,
-          image: lasagna,
-        },
-        {
-          id: 2,
-          title: "Тушёная говядина",
-          rating: 4.2,
-          image: beef,
-        },
-        {
-          id: 3,
-          title: "Сэндвич с яйцом пашот",
-          rating: 3.8,
-          image: sandwich,
-        },
-      ],
+      recipes: popularRecipesData,
     };
+  },
+  computed: {
+    sortedRecipes() {
+      return this.recipes.sort((a, b) => b.popularity - a.popularity);
+    },
   },
   methods: {
     getStars(rating) {
@@ -77,20 +61,18 @@ export default {
 }
 
 .top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap; /* Позволяет переносить элементы на следующую строку */
-}
-
-.top .view-all {
-  margin-top: 10px; /* Отступ для переноса на новую строку */
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 20px !important;
+  flex-wrap: wrap !important;
 }
 
 .animated-title {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 0;
+  padding-left: 0 !important;
+  font-size: 2em !important;
+  font-weight: bold !important;
+  margin: 0 !important;
   animation: slideFromLeft 0.8s ease-out;
 }
 
@@ -98,6 +80,8 @@ export default {
   color: #12a370;
   text-decoration: none;
   font-weight: bold;
+  margin: 0 !important;
+  margin-bottom: 5.5px !important;
   animation: slideFromRight 0.8s ease-out;
 }
 
@@ -139,6 +123,9 @@ export default {
     padding: 10px 12px; /* Пропорционально уменьшаем внутренние отступы */
     font-size: 0.9em;
     width: 90%; /* Увеличиваем ширину кнопки на маленьких экранах */
+  }
+  .view-all {
+    margin-top: 10px;
   }
 }
 

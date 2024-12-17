@@ -47,7 +47,7 @@ export default {
   methods: {
     async loadRecipeData() {
       try {
-        const response = await import("@/assets/testing-data/test.json");
+        const response = await import("@/assets/testing-data/testBestRecipe.json");
         this.recipe = response.recipe;
         this.slides = this.recipe.images || [];
         this.startSlider();
@@ -194,7 +194,6 @@ export default {
   color: white;
   text-decoration: none;
   border-radius: 25px;
-  font-weight: bold;
   margin-top: 20px;
   transition: background-color 0.3s ease, color 0.3s ease;
   width: 50%; /* Адаптивная ширина относительно карточки */
