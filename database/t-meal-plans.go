@@ -52,7 +52,7 @@ func (mpt *MealPlansTable) GetUserMealPlans(userId, limit int) ([]*models.MealPl
 	var mealPlans []*models.MealPlan
 	for rows.Next() {
 		var mp models.MealPlan
-		if err := rows.Scan(mp.Id, &mp.UserId, &mp.Name, &mp.Description); err != nil {
+		if err := rows.Scan(&mp.Id, &mp.UserId, &mp.Name, &mp.Description); err != nil {
 			return nil, fmt.Errorf("error getting meal plans: %v", err)
 		}
 		mealPlans = append(mealPlans, &mp)
@@ -104,7 +104,7 @@ func (mpt *MealPlansTable) DeleteMealPlan(id int) error {
 
 func (mpt *MealPlansTable) EditMealPlan(mp *models.MealPlan) error {
 	query := `UPDATE meal_plans SET user_id=$1, name=$3, description=$4 WHERE id=$5`
-	_, err := mpt.db.Exec(query, mp.UserId, mp.RecipeId, mp.Name, mp.Description, mp.Id)
+	_, err := mpt.db.Exec(query, mp.UserId, mp.Name, mp.Description, mp.Id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			log.Printf("No meal plan found with id %d", mp.Id)

@@ -12,7 +12,6 @@ type Ingredient struct {
 type MealPlan struct {
 	Id          int    `json:"id"`
 	UserId      int    `json:"user_id"`
-	RecipeId    int    `json:"recipe_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
@@ -76,7 +75,7 @@ type User struct {
 type RecipeImage struct {
 	Id        int    `json:"id"`
 	RecipeId  int    `json:"recipe_id"`
-	ImagePath string `json:"image"`
+	ImagePath string `json:"image_path"`
 }
 
 type PlanRecipes struct {
