@@ -3,19 +3,21 @@
     <section class="recipes">
       <div class="top">
         <h2>Наши рецепты</h2>
-        <div class="search-container">
-          <div id="search-bar" class="search-bar" :class="{ active: isSearchVisible }">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Введите запрос..."
-              class="search-input"
-              @keyup.enter="performSearch"
-            />
-            <button class="submit-btn" @click="performSearch">Найти</button>
+        <div class="hero-buttons">
+            <div class="search-container">
+            <div id="search-bar" class="search-bar" :class="{ active: isSearchVisible }">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Введите запрос..."
+                class="search-input"
+                @keyup.enter="performSearch"
+              />
+              <button class="search-btn" @click="performSearch">Найти</button>
+            </div>
+            <button id="search-btn" class="search-btn" @click="toggleSearchBar">Поиск</button>
+            <button id="filter-btn" class="filter-btn" @click="$emit('toggle-sidebar')">Фильтры</button>
           </div>
-          <button id="search-btn" class="search-btn" @click="toggleSearchBar">Поиск</button>
-          <button id="filter-btn" class="filter-btn" @click="$emit('toggle-sidebar')">Фильтры</button>
         </div>
       </div>
 
@@ -82,41 +84,80 @@ export default {
 }
 
 .top {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  margin-bottom: 20px !important;
-  flex-wrap: wrap !important;
+  display: flex; /* Используем Flexbox */
+  justify-content: space-between; /* Разделяем заголовок и кнопки по сторонам */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  margin-bottom: 20px;
 }
 
+.top h2{
+  margin: 0;
+}
+
+.hero-buttons{
+  margin-bottom: 5px;
+}
+
+/* Общие стили */
 .search-container {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Скрытый поисковый блок */
 .search-bar {
   display: none;
+  align-items: center;
+  gap: 10px;
 }
 .search-bar.active {
-  display: flex;
-  gap: 5px;
-}
-.search-input {
-  width: 200px;
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  display: flex; /* Показать при активном состоянии */
 }
 
-.search-btn,
-.filter-btn {
-  padding: 8px 12px;
+.search-input {
+  padding: 12px 20px;
+  border: 2px solid #dbdada;
+  border-radius: 25px;
+  outline: none;
+  width: 300px;
+  margin-bottom: 5px;
+}
+
+.hero-buttons .search-btn,
+.hero-buttons .filter-btn {
+  padding: 12px 20px;
   border: none;
-  background-color: #12a370;
-  color: white;
-  border-radius: 4px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
   cursor: pointer;
+  margin-right: 15px;
+}
+
+.hero-buttons .search-btn {
+  background-color: #12a370;
+  color: #fff;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-buttons .search-btn:hover {
+  background-color: #0e8a5d;
+  transform: scale(1.05);
+}
+
+.hero-buttons .filter-btn {
+  background-color: transparent;
+  border: 2px solid #12a370;
+  color: #12a370;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-buttons .filter-btn:hover {
+  background-color: #12a370;
+  color: #fff;
+  transform: scale(1.05);
 }
 
 .recipes-grid {

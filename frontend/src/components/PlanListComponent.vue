@@ -45,8 +45,8 @@
         </div>
         <button @click="openModal" id="addPlan" class="add-plan">Добавить рацион</button>
     
-        <div id="modal" class="modal" v-if="isModalOpen">
-            <div class="modal-content">
+        <div id="modal" class="modal" v-if="isModalOpen" @click="closeModal">
+            <div class="modal-content" @click.stop>
                 <button @click="closeModal" id="closeModalBtn" class="close-btn">✖</button>
                 <h4>Заполните форму, чтобы искусственный интеллект смог подобрать вам подходящий рацион питания.</h4>
                 <!-- Форма -->
@@ -79,9 +79,6 @@
                     <option>Поддержание веса</option>
                     </select>
                 </label>
-                <label>Ваши пожелания:
-                    <textarea placeholder="Введите текст..."></textarea>
-                </label>
                 <button type="submit" class="submit-btn">Сгенерировать рацион</button>
                 </form>
             </div>
@@ -99,13 +96,64 @@
   },
   methods: {
     openModal() {
-        console.log("Открыть модальное окно");
+    console.log("Открыть модальное окно");
       this.isModalOpen = true; // Открыть модальное окно
     },
     closeModal() {
       this.isModalOpen = false; // Закрыть модальное окно
     },
+
   },
 };
 </script>
+
+<style scoped>
+/* Базовые стили для модального окна */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.submit-btn {
+  background-color: #20b57f;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #1a9e70;
+}
+</style>
+
   
