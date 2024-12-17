@@ -1,170 +1,113 @@
 <template>
-  <div>
-    <section class="profile">
-            <h2>Мой профиль</h2>
-            <div class="profile-card">
-                <div class="profile-avatar">
-                    <img src="../assets/images/default-avatar.png" alt="Аватар">
-                    <button class="btn edit-avatar-btn">Изменить фото</button>
-                </div>
-                <div class="profile-info">
-                    <div class="profile-field">
-                        <label>Имя пользователя</label>
-                        <input type="text" value="Nickname" readonly>
-                    </div>
-                    <div class="profile-field">
-                        <label>Номер телефона</label>
-                        <input type="text" value="Phone number" readonly>
-                    </div>
-                    <div class="profile-field">
-                        <label>Адрес электронной почты</label>
-                        <input type="email" value="Email" readonly>
-                    </div>
-                    <div class="profile-actions">
-                        <button class="btn edit-profile-btn">Редактировать данные профиля</button>
-                        <button class="btn logout-btn">Выйти из аккаунта</button>
-                    </div>
-                </div>
-            </div>  
-    </section>
-
-    <!-- Секция "Избранное" -->
-    <section class="recipes">
-      <div class="top">
-        <h2>Избранное</h2>
-        <router-link to="/favorite" class="view-all">Посмотреть все →</router-link>
+  <section class="profile">
+    <h2>Мой профиль</h2>
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <img src="../assets/images/default-avatar.png" alt="Аватар" />
+        <button class="btn edit-avatar-btn">Изменить фото</button>
       </div>
-      <div class="recipes-grid">
-        <div 
-          class="recipe-card" 
-          v-for="(recipe, index) in recipes" 
-          :key="index">
-          <img :src="recipe.image" :alt="recipe.title" />
-          <h3>{{ recipe.title }}</h3>
-          <p>{{ recipe.price }}Р</p>
-          <div class="stars">
-            <h5>{{ recipe.rating }}</h5>
-            <span>★★★★☆</span>
-          </div>
-          <router-link :to="'/recipe' + recipe.id" class="btn-small">Посмотреть</router-link>
+      <div class="profile-info">
+        <div class="profile-field">
+          <label>Имя пользователя</label>
+          <input type="text" :value="user.name" readonly />
+        </div>
+        <div class="profile-field">
+          <label>Номер телефона</label>
+          <input type="text" :value="user.phone" readonly />
+        </div>
+        <div class="profile-field">
+          <label>Адрес электронной почты</label>
+          <input type="email" :value="user.email" readonly />
+        </div>
+        <div class="profile-actions">
+          <button class="btn edit-profile-btn">Редактировать данные профиля</button>
+          <button class="btn logout-btn" @click="logout">Выйти из аккаунта</button>
         </div>
       </div>
-    </section>
-
-    <!-- Секция "История" -->
-    <section class="recipes">
-      <div class="top">
-        <h2>История опробованных рецептов</h2>
-        <router-link to="/history" class="view-all">Посмотреть все →</router-link>
-      </div>
-      <div class="recipes-grid">
-        <div 
-          class="recipe-card" 
-          v-for="(recipe, index) in recipes" 
-          :key="index">
-          <img :src="recipe.image" :alt="recipe.title" />
-          <h3>{{ recipe.title }}</h3>
-          <p>{{ recipe.price }}Р</p>
-          <div class="stars">
-            <h5>{{ recipe.rating }}</h5>
-            <span>★★★★☆</span>
-          </div>
-          <router-link :to="'/history' + recipe.id" class="btn-small">Посмотреть</router-link>
-        </div>
-      </div>
-      <h2>Мои планы питания</h2>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script>
 export default {
-  name: "ProfileComponent.vue",
+  name: "ProfileComponent",
   data() {
     return {
-      isSearchVisible: false, // Состояние для поиска
-      searchQuery: "", // Поле для ввода поиска
-      searchInput: "",
-      recipes: [ // Список рецептов
-        { id: 1, title: "Лазанья из свиной шейки", price: 650, rating: 4.5, image: "../assets/images/lasagna.png" },
-        { id: 2, title: "Тушёная говядина", price: 650, rating: 4.5, image: "../assets/images/beef.png" },
-        { id: 3, title: "Сэндвич с яйцом пашот", price: 650, rating: 4.5, image: "../assets/images/sandwich.png" },
-      ],
+      user: JSON.parse(localStorage.getItem("user")) || {
+        name: "Неизвестный",
+        phone: "Неизвестно",
+        email: "Неизвестно",
+      },
     };
   },
-  computed: {
-    filteredRecipes() {
-      if (this.searchInput.trim() === "") {
-        return this.recipes; // Показать все рецепты, если строка поиска пустая
-      }
-      return this.recipes.filter(recipe =>
-        recipe.title.toLowerCase().includes(this.searchInput.toLowerCase())
-      );
-    },
-  },
   methods: {
-    toggleSearchBar() {
-      this.isSearchVisible = !this.isSearchVisible;
-    },
-    performSearch() {
-      // Обновляем searchInput только при нажатии на "Найти"
-      this.searchInput = this.searchQuery;
-      console.log("Поиск по запросу:", this.searchInput);
+    logout() {
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("user");
+      this.$router.push("/auth");
     },
   },
 };
 </script>
 
 <style scoped>
-/* Общие стили */
-.search-container {
+.profile {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.profile-card {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Скрытый поисковый блок */
-.search-bar {
-  display: none;
-  align-items: center;
-  gap: 5px;
-}
-.search-bar.active {
-  display: flex; /* Показать при активном состоянии */
-  
+.profile-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
 }
 
-.search-input {
+.profile-avatar .btn {
+  margin-top: 10px;
+}
+
+.profile-field label {
+  font-weight: bold;
+}
+
+.profile-field input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  outline: none;
-  width: 300px;
+  background-color: #f5f5f5;
 }
 
-.submit-btn {
-  padding: 8px 12px;
+.profile-actions {
+  margin-top: 20px;
+}
+
+.profile-actions .btn {
+  padding: 10px 15px;
+  margin-right: 10px;
   border: none;
-  background-color: #20b57f;
-  color: white;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.search-btn {
-  background: none;
-  border: none;
-  color: #12A370;
-  cursor: pointer;
-  font-size: 20px;
+.edit-profile-btn {
+  background-color: #12a370;
+  color: white;
 }
 
-
-.search-btn:hover, .filter-btn:hover {
-  color:#0c6445;
-  background-color: white;
-}
-
-.submit-btn:hover{
-  background-color: #0c6445;
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
 }
 </style>
