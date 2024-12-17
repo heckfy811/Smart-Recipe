@@ -1,3 +1,4 @@
+import numpy as np
 from flask import Flask, request, jsonify
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -27,6 +28,9 @@ y = pd.concat([y_breakfast, y_lunch, y_dinner], axis=1)
 
 model.fit(X, y)
 
+import numpy as np
+
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
@@ -40,14 +44,36 @@ def predict():
         'goal': le_goal.transform([data['goal']])[0]
     }])
 
-    predictions = model.predict(user_input)
+    probabilities = model.predict_proba(user_input)
+
+    def random_choice(probs, used_indices):
+        available_indices = [i for i in range(len(probs)) if i not in used_indices]
+        if not available_indices:
+            return 0
+        normalized_probs = probs[available_indices] / np.sum(probs[available_indices])
+        return np.random.choice(available_indices, p=normalized_probs)
+
+    def get_predictions(probabilities, start, end):
+        used_indices = set()
+        predictions = []
+        for i in range(start, end):
+            prediction = random_choice(probabilities[i][0], used_indices)
+            predictions.append(prediction)
+            used_indices.add(prediction)
+        return predictions
+
+    breakfast = get_predictions(probabilities, 0, 3)
+    lunch = get_predictions(probabilities, 3, 6)
+    dinner = get_predictions(probabilities, 6, 9)
+
     result = {
-        "breakfast": predictions[0][:3].tolist(),
-        "lunch": predictions[0][3:6].tolist(),
-        "dinner": predictions[0][6:9].tolist()
+        "breakfast": [int(x) for x in breakfast],
+        "lunch": [int(x) for x in lunch],
+        "dinner": [int(x) for x in dinner]
     }
     print(result)
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
