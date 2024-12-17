@@ -120,7 +120,6 @@ func PostMealPlanHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error decoding response"})
 		return
 	}
-	fmt.Println(prediction.Breakfast)
 	userIdStr, exists := c.Get("userId")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "user ID not found"})
@@ -138,7 +137,7 @@ func PostMealPlanHandler(c *gin.Context) {
 	}
 	mealPlanId, err := database.Database.MealPlans.AddMealPlan(mp)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error1": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	var recipe models.PlanRecipes
@@ -151,7 +150,7 @@ func PostMealPlanHandler(c *gin.Context) {
 		recipe.MealTime = "breakfast"
 		_, err := database.Database.PlanRecipes.AddPlanRecipes(&recipe)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error2": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
@@ -164,7 +163,7 @@ func PostMealPlanHandler(c *gin.Context) {
 		recipe.MealTime = "lunch"
 		_, err := database.Database.PlanRecipes.AddPlanRecipes(&recipe)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error3": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
@@ -177,10 +176,24 @@ func PostMealPlanHandler(c *gin.Context) {
 		recipe.MealTime = "dinner"
 		_, err := database.Database.PlanRecipes.AddPlanRecipes(&recipe)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error4": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
 	endpoint := fmt.Sprintf("/c/meal_plans/%d", mealPlanId)
 	c.Redirect(http.StatusFound, endpoint)
+}
+
+func PostRecipeImageHandler(c *gin.Context) {
+	var req *models.RecipeImage
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	_, err := database.Database.RecipeImages.AddRecipeImage(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"message": "success"})
 }

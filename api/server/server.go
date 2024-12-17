@@ -51,6 +51,7 @@ func (s *APIServer) Run() error {
 			mealPlans.GET("", handlers.GetMealPlansHandler)
 			mealPlans.GET("/:id", handlers.GetPlanRecipesHandler)
 			mealPlans.POST("/generate", handlers.PostMealPlanHandler)
+			mealPlans.DELETE("/delete", handlers.DeleteMealPlanHandler)
 		}
 		admin := closeGroup.Group("/admin", handlers.AdminMiddleware())
 		{
@@ -64,7 +65,8 @@ func (s *APIServer) Run() error {
 			{
 				recipeManagement.POST("/add/recipes", handlers.PostRecipesHandler)
 				recipeManagement.POST("/add/ingredients", handlers.PostIngredientsHandler)
-				//recipeManagement.POST("/add/images") Потом добавить надо
+				recipeManagement.POST("/add/images", handlers.PostRecipeImageHandler)
+				recipeManagement.DELETE("/delete/image", handlers.DeleteRecipeImageHandler)
 				recipeManagement.DELETE("/delete/recipe", handlers.DeleteRecipeHandler)
 				recipeManagement.DELETE("/delete/ingredient", handlers.DeleteIngredientHandler)
 			}

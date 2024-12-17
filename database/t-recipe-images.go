@@ -27,13 +27,14 @@ func newRecipeImagesTable(db *sql.DB) (*RecipeImagesTable, error) {
 	return &RecipeImagesTable{db}, nil
 }
 
-func (rit *RecipeImagesTable) AddRecipeImage(image *models.RecipeImage) error {
-	query := `INSERT INTO recipe_images (recipe_id, image_path) VALUES ($1, $2);`
-	_, err := rit.db.Exec(query, image.RecipeId, image.ImagePath)
+func (rit *RecipeImagesTable) AddRecipeImage(image *models.RecipeImage) (int, error) {
+	var id int
+	query := `INSERT INTO recipe_images (recipe_id, image_path) VALUES ($1, $2) RETURNING id;`
+	err := rit.db.QueryRow(query, image.RecipeId, image.ImagePath).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("error adding recipe image: %v", err)
+		return -1, fmt.Errorf("error adding recipe image: %v", err)
 	}
-	return nil
+	return id, nil
 }
 
 func (rit *RecipeImagesTable) GetRecipeImageById(id int) ([]byte, error) {
