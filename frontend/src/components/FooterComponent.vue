@@ -50,10 +50,19 @@ footer {
 .footer-logo {
   flex: 1 1 30%; /* Логотип занимает до 30% ширины */
   min-width: 200px; /* Минимальная ширина для логотипа */
+  text-align: left; /* Выравнивание текста по левому краю */
+  padding-left: 0; /* Убираем лишние отступы */
 }
 
 .footer-logo h3 {
-  margin-bottom: 10px;
+  margin-bottom: 5px; /* Уменьшаем отступ между заголовком и текстом */
+  text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.footer-logo p {
+  margin: 0; /* Убираем отступы вокруг текста */
+  font-size: 1.2em; /* Чуть меньший шрифт */
+  text-align: left; /* Текст под логотипом выровнен по левому краю */
 }
 
 .footer-links {
@@ -76,16 +85,19 @@ footer {
 .footer-social {
   flex: 1 1 30%; /* Социальные ссылки занимают до 30% ширины */
   min-width: 200px; /* Минимальная ширина для соцсетей */
+  text-align: center; /* Центрируем содержимое */
 }
 
 .footer-social .social-icons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  justify-content: center; /* Центрируем иконки */
+  gap: 15px; /* Отступы между иконками */
+  margin-top: 10px; /* Отступ сверху */
+  margin-bottom: 15px; /* Отступ до текста */
 }
 
 .footer-social img {
-  width: 30px; /* Размер иконок уменьшен для мобильных */
+  width: 30px;
   height: 30px;
 }
 
@@ -108,6 +120,15 @@ footer p {
     gap: 30px; /* Увеличиваем отступы между секциями */
   }
 
+  .footer-logo {
+    text-align: center; /* Центрируем логотип и текст */
+  }
+
+  .footer-logo h3,
+  .footer-logo p {
+    text-align: center; /* Центрируем заголовок и текст */
+  }
+
   .footer-logo,
   .footer-links,
   .footer-social {
@@ -124,4 +145,5 @@ footer p {
     font-size: 0.9em; /* Уменьшаем шрифт для мобильных */
   }
 }
+
 </style>

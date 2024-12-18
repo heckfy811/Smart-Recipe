@@ -81,11 +81,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/recipe',
+    path: '/recipe/:id',
     name: 'Recipe',
     component: RecipeView,
+    props: true,
     meta: { requiresAuth: true },
-  },
+  },  
   {
     path: '/recipes',
     name: 'Recipes',

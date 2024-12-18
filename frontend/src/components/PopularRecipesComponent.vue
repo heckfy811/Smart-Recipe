@@ -156,14 +156,14 @@ export default {
   width: 100%;
   height: 100%;
   fill: none;
-  stroke: #333; /* Цвет контура сердечка */
+  stroke: #333;
   stroke-width: 2;
   transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
 .heart-icon.filled {
-  fill: #e63946; /* Заполненный цвет сердечка */
-  stroke: #e63946; /* Цвет контура совпадает с заливкой */
+  fill: #e63946;
+  stroke: #e63946;
 }
 
 
@@ -198,6 +198,7 @@ export default {
 
 .recipe-card img {
   width: 100%;
+  height: 100%;
   border-radius: 10px;
   margin-bottom: 15px;
 }

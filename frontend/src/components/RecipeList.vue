@@ -4,7 +4,7 @@
       <div class="top">
         <h2>Наши рецепты</h2>
         <div class="hero-buttons">
-            <div class="search-container">
+          <div class="search-container">
             <div id="search-bar" class="search-bar" :class="{ active: isSearchVisible }">
               <input
                 v-model="searchQuery"
@@ -23,14 +23,28 @@
 
       <!-- Сетка рецептов -->
       <div class="recipes-grid">
-        <div v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-card">
+        <div v-for="(recipe, index) in filteredRecipes" :key="recipe.id" class="recipe-card">
           <img :src="recipe.image" :alt="recipe.title" />
           <h3>{{ recipe.title }}</h3>
           <div class="stars">
             <h5>{{ recipe.rating }}</h5>
             <span>{{ getStars(recipe.rating) }}</span>
           </div>
-          <router-link :to="'/recipe/' + recipe.id" class="btn-small">Посмотреть</router-link>
+          <div class="card-actions">
+            <router-link :to="'/recipe/' + recipe.id" class="btn-small">Посмотреть</router-link>
+            <button class="favourite-btn" @click="toggleFavourite(recipe.id)">
+              <svg
+                class="heart-icon"
+                :class="{ filled: isFavourite(recipe.id) }"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -47,6 +61,7 @@ export default {
       isSearchVisible: false,
       searchQuery: "",
       recipes: recipesData,
+      favourites: JSON.parse(localStorage.getItem("favourites")) || [],
     };
   },
   computed: {
@@ -71,6 +86,17 @@ export default {
       const halfStar = rating % 1 >= 0.5 ? "★" : "";
       const emptyStars = "☆".repeat(5 - fullStars - (halfStar ? 1 : 0));
       return "★".repeat(fullStars) + halfStar + emptyStars;
+    },
+    toggleFavourite(recipeId) {
+      if (this.isFavourite(recipeId)) {
+        this.favourites = this.favourites.filter((id) => id !== recipeId);
+      } else {
+        this.favourites.push(recipeId);
+      }
+      localStorage.setItem("favourites", JSON.stringify(this.favourites));
+    },
+    isFavourite(recipeId) {
+      return this.favourites.includes(recipeId);
     },
   },
 };
@@ -188,6 +214,7 @@ export default {
 
 .recipe-card img {
   width: 100%;
+  height: 100%;
   border-radius: 10px;
   margin-bottom: 15px;
 }
@@ -224,6 +251,13 @@ export default {
   margin-top: 7%;
 }
 
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
 .btn-small {
   display: inline-block;
   padding: 8px 15px;
@@ -242,6 +276,33 @@ export default {
 
 .btn-small:hover {
   background-color: #0e8a5d;
+}
+
+.favourite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 0;
+}
+
+.heart-icon {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.heart-icon.filled {
+  fill: #e63946;
+  stroke: #e63946;
 }
 
 /* Адаптивность */

@@ -21,11 +21,11 @@
       "image": "/src/assets/images/sandwich.png"
     },
     {
-        "id": 4,
-        "title": "Сэндвич с яйцом пашот 4",
-        "rating": 3.8,
-        "popularity": 100,
-        "image": "/src/assets/images/sandwich.png"
-      }
+      "id": 4,
+      "title": "Домашние пельмени",
+      "rating": 4.8,
+      "popularity": 3000,
+      "image": "/src/assets/images/dumplings2.jpg"
+    }
   ]
   

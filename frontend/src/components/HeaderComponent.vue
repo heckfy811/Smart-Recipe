@@ -86,11 +86,10 @@ export default {
   const navLinksEl = document.querySelector(".nav-links");
 
   if (navbar && navLinksEl) {
-    // Проверяем ширину окна и вычисляем, нужно ли скрывать навбар
     const navLinksWidth = navLinksEl.offsetWidth || 0;
     isCollapsed.value = navbar.offsetWidth < navLinksWidth + 150;
   } else {
-    isCollapsed.value = window.innerWidth <= 768; // Восстанавливаем isCollapsed при изменении ширины
+    isCollapsed.value = window.innerWidth <= 768;
   }
 };
 

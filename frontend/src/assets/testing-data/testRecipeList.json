@@ -1,27 +1,26 @@
 [
-    {
-      "id": 1,
-      "title": "Лазанья из свиной шейки",
-      "rating": 4.5,
-      "image": "/src/assets/images/lasagna.png"
-    },
-    {
-      "id": 2,
-      "title": "Тушёная говядина",
-      "rating": 4.2,
-      "image": "/src/assets/images/beef.png"
-    },
-    {
-      "id": 3,
-      "title": "Сэндвич с яйцом пашот",
-      "rating": 4.8,
-      "image": "/src/assets/images/sandwich.png"
-    },
-    {
-      "id": 4,
-      "title": "Сэндвич с яйцом пашот",
-      "rating": 4.8,
-      "image": "/src/assets/images/sandwich.png"
-    }
-  ]
-  
+  {
+    "id": 1,
+    "title": "Лазанья из свиной шейки",
+    "rating": 4.5,
+    "image": "/src/assets/images/lasagna.png"
+  },
+  {
+    "id": 2,
+    "title": "Тушёная говядина",
+    "rating": 4.2,
+    "image": "/src/assets/images/beef.png"
+  },
+  {
+    "id": 3,
+    "title": "Сэндвич с яйцом пашот",
+    "rating": 3.8,
+    "image": "/src/assets/images/sandwich.png"
+  },
+  {
+    "id": 4,
+    "title": "Домашние пельмени",
+    "rating": 4.8,
+    "image": "/src/assets/images/dumplings2.jpg"
+  }
+]
