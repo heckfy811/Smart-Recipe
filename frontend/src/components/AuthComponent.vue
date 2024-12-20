@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import usersData from "@/assets/testing-data/testAuth.json";
+import usersData from "@/assets/testing-data/usersData.json";
 
 export default {
   name: "AuthComponent",

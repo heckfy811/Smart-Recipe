@@ -16,6 +16,8 @@ export default defineConfig({
     },
   },
   server: {
+    host: '192.168.56.1', // Укажите ваш IP
+    port: 5173,
     watch: {
       usePolling: true, // Включение polling (необязательно, зависит от окружения)
     },
